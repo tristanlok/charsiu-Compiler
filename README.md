@@ -14,6 +14,19 @@ Goals:
 - Build a Compiler from scratch without using any external tools
 - Have a strong understanding of the fundamentals of a programming language (Lexers and Parsers)
 
+Planned Features:
+
+- C-like syntax
+- variable bindings
+- integers and booleans
+- arithmetic expressions
+- built-in functions
+- first-class and higher-order functions
+- closures
+- a string data structure
+- an array data structure
+- a hash data structure
+
 Roadmap:
 
 - Implement charsiu --> tree-walking Interpreter
