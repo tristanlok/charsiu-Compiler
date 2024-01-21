@@ -16,6 +16,6 @@ Goals:
 
 Roadmap:
 
-- Implement charsiu --> Interpreter
+- Implement charsiu --> tree-walking Interpreter
 - Improve upon charsiu --> Compiler
 - Improvements towards charsiu --> Garbarge Collection
