@@ -12,7 +12,7 @@ Instead of using Go, I will be coding this Compiler in C from scratch to further
 Goals:
 
 - Build a Compiler from scratch without using any external tools
-- Have a strong understanding of the fundamentals of a programming language
+- Have a strong understanding of the fundamentals of a programming language (Lexers and Parsers)
 
 Roadmap:
 
