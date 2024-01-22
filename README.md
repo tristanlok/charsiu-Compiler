@@ -7,7 +7,7 @@ I will being exploring the implementation of programming languages and creating 
 
 Taking inspiration from the 2 popular books: Writing An Interpreter In Go & Writing A Compiler In Go, both by Thorsten Ball, I hope to understand and build upon this to further my understanding of Compilers.
 
-Instead of using Go, I will be coding this Compiler in C from scratch to further my understanding of the programming language while also challenging myself to not only understand the content of the books, but to apply to a different programming language.
+Instead of using Go, I will be coding this Compiler from scratch in C to further my understanding of the programming language while also challenging myself to not only understand the content of the books, but to apply to a different programming language.
 
 Goals:
 
