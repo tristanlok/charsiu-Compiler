@@ -1,9 +1,9 @@
 #ifndef LEXER_H
 #define LEXER_H
 
-#include "token.h"
+#include "defs.h"
 
-int scan(struct token *t);
+int scanFile(struct token *t);
 static int chrpos(char *s, int c);
 static int getint(int c);
 static int skipwhitespace(void);

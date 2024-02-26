@@ -1,9 +1,6 @@
-#ifndef extern_
-#define extern_ extern
-#endif
+#include "defs.h"
 
-#include "token.h"
-
-extern_ int Line;
-extern_ int Putback;
-extern_ FILE *Infile;
+extern int Line; // Current Line
+extern int Putback; // If there is a character to put back
+extern FILE *Infile; // 
+extern struct token Token; // Most recent token scanned (figure out why)

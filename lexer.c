@@ -1,4 +1,4 @@
-#include "token.h"
+#include "defs.h"
 #include "data.h"
 #include "lexer.h"
 
@@ -57,30 +57,31 @@ static int getint(int c) {
     return val;
 }
 
-int scan(struct token *t) {
+int scanFile(struct token *t) {
     int c;
 
-    c = skipwhitespace();
+    c = skipwhitespace(); // get the next character that is not a whitespace
 
     switch (c) {
         case EOF:
-            return 0;
+            t->tokenValue = T_EOF;
+            break;
         case '+':
-            t->token = PLUS;
+            t->tokenValue = T_PLUS;
             break;
         case '-':
-            t->token = MINUS;
+            t->tokenValue = T_MINUS;
             break;
         case '*':
-            t->token = TIMES;
+            t->tokenValue = T_TIMES;
             break;
         case '/':
-            t->token = DIV;
+            t->tokenValue = T_DIV;
             break;
         default:
             if (isdigit(c)) {
                 t->intValue = getint(c);
-                t->token = INTLIT;
+                t->tokenValue = T_INTLIT;
                 break;
             }
 

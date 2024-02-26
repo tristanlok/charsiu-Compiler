@@ -1,9 +1,15 @@
+#include "ast.h"
 #include "lexer.h"
-#include "token.h"
+#include "defs.h"
+#include "interpreter.h"
+#include "parser.h"
 
-#define extern_
 #include "data.h"
-#undef extern_
+
+int Line;
+int Putback;
+FILE *Infile;
+struct token Token;
 
 static void init();
 
@@ -12,24 +18,10 @@ static void init() {
     Putback = '\n';
 }
 
-static void scanfile();
-
-static void scanfile() {
-    struct token T;
-
-    char *tokenEnglish[5] = { "+", "-", "*", "/", "intlit" };
-
-    while (scan(&T)) {
-        printf("Token %s", tokenEnglish[T.token]);
-        if (T.token == INTLIT) {
-            printf(", value %d\n", T.intValue);
-        }
-    }
-}
-
 int main();
 
 int main() {
+    struct ASTnode *n;
 
     init();
 
@@ -40,7 +32,10 @@ int main() {
 
     Infile = fopen(path, "r");
 
-    scanfile();
+    scanFile(&Token);
+    n = makeTree();
+
+    printf("%d\n", interpretTree(n));
 
     return 0;
 }
