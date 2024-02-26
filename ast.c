@@ -1,6 +1,6 @@
-#include "ast.h"
+#include "Header_Files\ast.h"
 #include <stdlib.h>
-#include "defs.h"
+#include "Header_Files\defs.h"
 
 struct ASTnode *createNode(int tokenValue, struct ASTnode *left, struct ASTnode *right, int intValue) {
     struct ASTnode *node;

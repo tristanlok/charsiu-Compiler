@@ -1,6 +1,6 @@
-#include "ast.h"
-#include "data.h"
-#include "lexer.h"
+#include "Header_Files\ast.h"
+#include "Header_Files\data.h"
+#include "Header_Files\lexer.h"
 
 int convertToken(int tokenValue) {
     switch (tokenValue) {
