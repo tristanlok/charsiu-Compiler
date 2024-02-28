@@ -3,7 +3,7 @@
 
 #include "defs.h"
 
-int scanFile(struct token *t);
+int scanChar(struct token *t);
 static int chrpos(char *s, int c);
 static int getint(int c);
 static int skipwhitespace(void);

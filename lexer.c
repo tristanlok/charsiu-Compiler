@@ -57,7 +57,7 @@ static int getint(int c) {
     return val;
 }
 
-int scanFile(struct token *t) {
+int scanChar(struct token *t) {
     int c;
 
     c = skipwhitespace(); // get the next character that is not a whitespace

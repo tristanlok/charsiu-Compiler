@@ -32,7 +32,7 @@ int main() {
 
     Infile = fopen(path, "r");
 
-    scanFile(&Token);
+    scanChar(&Token);
     n = makeTree(0);
 
     printf("%d\n", interpretTree(n));

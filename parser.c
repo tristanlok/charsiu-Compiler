@@ -39,7 +39,7 @@ static struct ASTnode *getPrimaryNode() {
     switch (Token.tokenValue) {
         case T_INTLIT:
             n = createLeaf(T_INTLIT, Token.intValue);
-            scanFile(&Token); // Get next token
+            scanChar(&Token); // Get next token
             return n;
 
         default:
@@ -113,7 +113,7 @@ struct ASTnode *makeTree(int prevTokPrec) {
     int operatorTokenvalue = Token.tokenValue;
 
     while (Token.tokenValue != T_EOF && determinePrecedence(operatorTokenvalue) > prevTokPrec) {
-        scanFile(&Token);
+        scanChar(&Token);
 
         rightn = makeTree(determinePrecedence(operatorTokenvalue));
 
