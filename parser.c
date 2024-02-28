@@ -2,6 +2,21 @@
 #include "Header_Files\data.h"
 #include "Header_Files\lexer.h"
 
+static int operatorPrecedence[] = { 10, 10, 20, 20, 0, 0};
+//                                  +  -   *  /  INTLIT EOF
+
+// Ensures that the correct grammar syntax is used
+static int determinePrecedence(int tokenValue) {
+    int prec = operatorPrecedence[tokenValue];
+
+    if (prec == 0){
+        printf("syntax error on line %d, token %d\n", Line, tokenValue);
+        exit(1);
+    }
+
+    return prec;
+}
+
 int convertToken(int tokenValue) {
     switch (tokenValue) {
         case T_PLUS:
@@ -35,40 +50,78 @@ static struct ASTnode *getPrimaryNode() {
 
 /*
 
-Simple Parser w/o priorities
+Parser w/ preceedence using Pratt's parser (Understanding)
 
-5 + 5
+1 + 4 * 7 + 3
 
-Gets the first number -> 5 as left then it scans the next one
+Takes in the first int token (1)
 
-It gets the node value of the second one, +
+Scan the next token - move on if not EOF
 
-it then scans the next token
+check if the current precedence is greater than the previous (+) 10 > 0
 
-it then recursively calls upon itself, if the left is the last thing, it returns that leaf as the right else, you get it to work recursively
+scans the next token (4)
 
-now it builds a tree with both leafs with the head being the +
+Recursively calls itself giving the precidence of the operator (10)
+
+Takes in the first token (4)
+
+scan the next token - move on if not EOF
+
+check if the current precedence is greater that the previous (x) 20 > 10
+
+scans the next token (7)
+
+Recursively calls itself giving hte precidence of the operator (20)
+
+Takes in the first token (7)
+
+scan in the next token - move on if not EOF
+
+check if the current precedence is greater than the previous (+) 10 > 20 (false)
+
+returns back 7 as right
+
+creates the first subtree (multiplication 4*7)
+
+checks if the TOKEN (currently +) 10 > 20 (false)
+
+returns multiplcation subtree back to first function as right
+
+creates the second subtree [1 + (4 * 7)]
+
+checks if the TOKEN (currently +) 10 > 0
+
+scans the next token (3)
+
+since EOF after right will be 3
+
+creates the third subtree [1 + (4 * 7)] + 3
+
+since EOF
+
+return third subtree
 
 */
 
-struct ASTnode *makeTree() {
-    struct ASTnode *n, *leftn, *rightn;
+struct ASTnode *makeTree(int prevTokPrec) {
+    struct ASTnode *leftn, *rightn;
     int nodeValue;
 
     leftn = getPrimaryNode();
 
-    if (Token.tokenValue == T_EOF) {
-        return leftn;
+    int operatorTokenvalue = Token.tokenValue;
+
+    while (Token.tokenValue != T_EOF && determinePrecedence(operatorTokenvalue) > prevTokPrec) {
+        scanFile(&Token);
+
+        rightn = makeTree(determinePrecedence(operatorTokenvalue));
+
+        leftn = createNode(convertToken(operatorTokenvalue), leftn, rightn, 0);
+
+        operatorTokenvalue = Token.tokenValue;
     }
 
-    nodeValue = convertToken(Token.tokenValue);
-
-    scanFile(&Token);
-
-    rightn = makeTree();
-
-    n = createNode(nodeValue, leftn, rightn, 0); // creates the node with the operator as the head
-
-    return n;
+    return leftn;
 
 }
