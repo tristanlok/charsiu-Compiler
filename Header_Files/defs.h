@@ -1,11 +1,6 @@
 #ifndef DEFS_H
 #define DEFS_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-
 // TOKEN
 
 // Token Type
