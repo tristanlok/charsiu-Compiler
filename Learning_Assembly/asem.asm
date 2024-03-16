@@ -6,7 +6,7 @@ _start:
     mov rax, 1
     mov rdi, 1
     lea rsi, [hello_world]
-    mov rdx, 13
+    mov rdx, 14
     syscall
 
     mov rax, 60
