@@ -1,17 +1,18 @@
-.global _start
-.intel_syntax noprefix
+section .data
+    text db "Hello, World!",10
+
+section .text
+    global _start
 
 _start:
-
     mov rax, 1
     mov rdi, 1
-    lea rsi, [hello_world]
+    mov rsi, text
     mov rdx, 14
     syscall
 
     mov rax, 60
-    mov rdi, 69
+    mov rdi, 0
     syscall
 
-hello_world:
-    .asciz "Hello, World!\n"
+
