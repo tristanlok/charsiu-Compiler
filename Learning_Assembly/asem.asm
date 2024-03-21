@@ -26,6 +26,24 @@ _start:
     mov rax, 7
     call _printDigit
 
+    mov rdx, 0
+    mov rax, 6
+    mov rbx, 3
+    div rbx
+
+    call _printDigit
+
+    mov rax, 2
+    mov rbx, 3
+    mul rbx
+
+    call _printDigit
+
+
+    mov rax, 6
+    add rax, 2
+    call _printDigit
+
     call _endProgram
 
 _getName:
