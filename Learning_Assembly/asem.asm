@@ -72,10 +72,11 @@ _start:
 
     mov rsi, rsp
     mov rdx, 1
+
     call _printText ; newline
 
-    add rsp, 2
-    
+    add rsp, 8 ; Always increment by 8 as push function always pushes 64 bit
+
     pop rax
     call _printDigit ; 5
 
