@@ -12,12 +12,12 @@ section .text
 _start:
     
     ; Inputing and Outputting Text
-    mov rsi, text1
+    lea rsi, [rel text1]
     mov rdx, 19
     call _printText
     call _getName
 
-    mov rsi, text2
+    lea rsi, [rel text2]
     mov rdx, 7
     call _printText
 
@@ -99,9 +99,9 @@ _printText:
 
 _printDigit:
     add rax, 48
-    mov [digit], al ;first byte of rax
+    mov [rel digit], al ;first byte of rax
     
-    mov rsi, digit
+    lea rsi, [rel digit]
     mov rdx, 2
     call _printText
     ret
