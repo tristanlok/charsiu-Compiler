@@ -1,7 +1,7 @@
-#include "Header_Files\\generatecode.h"
-#include "Header_Files\\defs.h"
-#include "Header_files\\data.h"
-#include "Header_Files\\acg.h"
+#include "..\\include\\generatecode.h"
+#include "..\\include\\defs.h"
+#include "..\\include\\data.h"
+#include "..\\include\\acg.h"
 
 // Basically identical to the basic interpreter code
 static int generate (struct ASTnode *n) {

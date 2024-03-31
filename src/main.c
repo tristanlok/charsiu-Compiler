@@ -1,15 +1,10 @@
-#include "Header_Files\\ast.h"
-#include "Header_Files\\lexer.h"
-#include "Header_Files\\defs.h"
-#include "Header_Files\\interpreter.h"
-#include "Header_Files\\parser.h"
+#include "..\\include\\ast.h"
+#include "..\\include\\lexer.h"
+#include "..\\include\\defs.h"
+#include "..\\include\\interpreter.h"
+#include "..\\include\\parser.h"
 
-#include "Header_Files\\data.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
+#include "..\\include\\data.h"
 
 int Line;
 int Putback;
