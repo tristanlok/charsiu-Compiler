@@ -1,6 +1,6 @@
-#include "Header_Files\ast.h"
-#include "Header_Files\data.h"
-#include "Header_Files\lexer.h"
+#include "Header_Files\\ast.h"
+#include "Header_Files\\data.h"
+#include "Header_Files\\lexer.h"
 
 static int operatorPrecedence[] = { 10, 10, 20, 20, 0, 0};
 //                                  +  -   *  /  INTLIT EOF

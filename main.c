@@ -1,10 +1,10 @@
-#include "Header_Files\ast.h"
-#include "Header_Files\lexer.h"
-#include "Header_Files\defs.h"
-#include "Header_Files\interpreter.h"
-#include "Header_Files\parser.h"
+#include "Header_Files\\ast.h"
+#include "Header_Files\\lexer.h"
+#include "Header_Files\\defs.h"
+#include "Header_Files\\interpreter.h"
+#include "Header_Files\\parser.h"
 
-#include "Header_Files\data.h"
+#include "Header_Files\\data.h"
 
 #include <stdio.h>
 #include <stdlib.h>

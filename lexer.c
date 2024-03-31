@@ -1,6 +1,6 @@
-#include "Header_Files\defs.h"
-#include "Header_Files\data.h"
-#include "Header_Files\lexer.h"
+#include "Header_Files\\defs.h"
+#include "Header_Files\\data.h"
+#include "Header_Files\\lexer.h"
 
 static void putback(int c) {
   Putback = c;
