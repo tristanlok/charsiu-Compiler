@@ -3,23 +3,25 @@
 
 #include "ast.h"
 #include "lexer.h"
-
 #include "interpreter.h"
 #include "parser.h"
 
+// Initializing Global Variables
 int Line;
 int Putback;
 FILE *Infile;
 struct token Token;
 
+// Initializing Functions
 static void init();
+int main();
 
+
+// Functions
 static void init() {
     Line = 1;
     Putback = '\n';
 }
-
-int main();
 
 int main() {
     struct ASTnode *n;
