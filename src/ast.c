@@ -1,5 +1,5 @@
-#include "..\\include\\ast.h"
-#include "..\\include\\defs.h"
+#include "ast.h"
+#include "defs.h"
 
 #include <stdlib.h>
 

@@ -1,8 +1,6 @@
 #ifndef LEXER_H
 #define LEXER_H
 
-#include "defs.h"
-
 int scanChar(struct token *t);
 static int chrpos(char *s, int c);
 static int getint(int c);

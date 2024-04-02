@@ -1,10 +1,10 @@
-#include "..\\include\\generatecode.h"
-#include "..\\include\\defs.h"
-#include "..\\include\\data.h"
-#include "..\\include\\acg.h"
+#include "acg.h"
+#include "defs.h"
+#include "data.h"
+#include "generatecode.h"
 
 // Basically identical to the basic interpreter code
-static int generate (struct ASTnode *n) {
+static int generate(struct ASTnode *n) {
     int leftReg, rightReg;
 
     // Generate the code under the left most node first

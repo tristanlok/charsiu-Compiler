@@ -1,5 +1,3 @@
-#include "defs.h"
-
 // Keep this here for now
 #include <stdio.h>
 #include <stdlib.h>

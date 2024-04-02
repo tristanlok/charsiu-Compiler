@@ -1,5 +1,7 @@
-#include "..\\include\\ast.h"
-#include "..\\include\\data.h"
+#include "ast.h"
+#include "data.h"
+#include "interpreter.h"
+#include "defs.h"
 
 int interpretTree(struct ASTnode *n) {
 

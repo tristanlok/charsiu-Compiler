@@ -1,10 +1,11 @@
-#include "..\\include\\ast.h"
-#include "..\\include\\lexer.h"
-#include "..\\include\\defs.h"
-#include "..\\include\\interpreter.h"
-#include "..\\include\\parser.h"
+#include "defs.h"
+#include "data.h"
 
-#include "..\\include\\data.h"
+#include "ast.h"
+#include "lexer.h"
+
+#include "interpreter.h"
+#include "parser.h"
 
 int Line;
 int Putback;

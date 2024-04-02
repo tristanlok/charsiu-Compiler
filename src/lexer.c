@@ -1,6 +1,6 @@
-#include "..\\include\\defs.h"
-#include "..\\include\\data.h"
-#include "..\\include\\lexer.h"
+#include "defs.h"
+#include "data.h"
+#include "lexer.h"
 
 static void putback(int c) {
   Putback = c;

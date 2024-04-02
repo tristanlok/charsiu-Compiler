@@ -1,5 +1,14 @@
-cmake_minimum_required(VERSION 2.28.3)
+cmake_minimum_required(VERSION 3.28.3)
 
 project(charsiu-Compiler)
 
-add_executable(${PROJECT_NAME} ".\\src\\main.c")
+file(GLOB_RECURSE SRC_FILES src/*.c)
+add_executable(${PROJECT_NAME} ${SRC_FILES})
+
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+#install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/bin/)
+
+set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/)
+
+set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/bin/)
