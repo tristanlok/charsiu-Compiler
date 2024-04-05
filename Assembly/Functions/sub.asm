@@ -14,7 +14,7 @@ _start:
     pop r8
     pop r9
 
-    add r9, r8
+    sub r9, r8
 
     push r9
 
