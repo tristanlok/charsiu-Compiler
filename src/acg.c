@@ -31,3 +31,7 @@ void acg_printInt(int reg){
 void acg_postamble() {
     
 }
+
+int getmagicnumber(int value) {
+    return 0;
+}

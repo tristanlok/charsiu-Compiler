@@ -14,7 +14,11 @@ _start:
     pop r8
     pop rax
 
+    mov rdx, 0
+
     div r8
+
+    ; rdx will hold the remainder after division
 
     push rax
 

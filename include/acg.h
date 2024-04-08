@@ -12,4 +12,6 @@ void acg_preamble ();
 void acg_printInt(int reg);
 void acg_postamble();
 
+int getmagicnumber(int value);
+
 #endif
