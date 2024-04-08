@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.28.3)
 
 project(charsiu-Compiler)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 file(GLOB_RECURSE SRC_FILES src/*.c)
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 
