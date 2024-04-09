@@ -50,5 +50,12 @@ int main() {
     generateCode(n);
     fclose(Outfile);
 
+    system("nasm -f elf64 -o out.o out.asm"); // creates object file
+    system("ld out.o -o out"); // creates binary
+    
+    // Remove the extra files
+    system("rm out.o");
+    system("rm out.asm");
+
     return 0;
 }
