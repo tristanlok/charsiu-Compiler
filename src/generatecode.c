@@ -5,33 +5,36 @@
 
 // Basically identical to the basic interpreter code
 static int generate(struct ASTnode *n) {
-    int leftReg, rightReg;
-
     // Generate the code under the left most node first
     if (n->left){
-        leftReg = generate(n->left);
+        generate(n->left);
     }
 
     // Generate the code under the right most node
     if (n->right){
-        rightReg = generate(n->right);
+        generate(n->right);
     }
 
     switch (n->tokenValue) { 
         case N_PLUS:
-            return acg_add(leftReg, rightReg);
+            acg_add();
+            break;
 
         case N_MINUS:
-            return acg_minus(leftReg, rightReg);
+            acg_minus();
+            break;
 
         case N_TIMES:
-            return acg_times(leftReg, rightReg);
+            acg_times();
+            break;
 
         case N_DIV:
-            return acg_div(leftReg, rightReg);
+            acg_div();
+            break;
         
         case N_INTLIT:
-            return acg_load(n->intValue);
+            acg_load(n->intValue);
+            break;
 
         default:
             printf("Unknown token in on line %d\n", Line);
@@ -40,11 +43,9 @@ static int generate(struct ASTnode *n) {
 }
 
 void generateCode(struct ASTnode *n) {
-    int reg;
-
     acg_preamble();
-    reg = generate(n);
+    generate(n);
 
-    acg_printInt(reg);
+    acg_printInt();
     acg_postamble();
 }

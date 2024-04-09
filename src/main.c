@@ -1,7 +1,7 @@
 #include "defs.h"
 #include "data.h"
 
-#include "ast.h"
+//#include "ast.h" Add back if needed
 #include "lexer.h"
 #include "interpreter.h"
 #include "parser.h"
