@@ -5,11 +5,13 @@
 #include "lexer.h"
 #include "interpreter.h"
 #include "parser.h"
+#include "generatecode.h"
 
 // Initializing Global Variables
 int Line;
 int Putback;
 FILE *Infile;
+FILE *Outfile;
 struct token Token;
 
 // Initializing Functions
@@ -33,12 +35,20 @@ int main() {
     printf("Please input the path to the code: ");
     scanf("%s", path);
 
+    // Reads the file
     Infile = fopen(path, "r");
 
+    // Scans each token and creates an AST tree
     scanChar(&Token);
     n = makeTree(0);
 
-    printf("%d\n", interpretTree(n));
+    // Interprets the AST Tree
+    // printf("%d\n", interpretTree(n));
+    
+    // Translates the AST Tree into Assembly x86-64 (NASM)
+    Outfile = fopen("out.asm", "w");
+    generateCode(n);
+    fclose(Outfile);
 
     return 0;
 }

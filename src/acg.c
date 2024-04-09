@@ -7,10 +7,12 @@ void acg_preamble () {
     fputs(
             "section .data\n" // Data section
             "\tnewline db 0xA\n"
+            "section .text\n" // Text Section
+            "\tglobal _start\n"
             "_printInteger:\n" // Print Integer Function 
             "\tpush rbp\n"
             "\tmov rbp, rsp\n"
-            "\t mov rcx, 10\n"
+            "\tmov rcx, 10\n"
             "_convertInteger:\n"
             "\txor rdx, rdx\n"
             "\tdiv rcx\n"
@@ -31,8 +33,6 @@ void acg_preamble () {
             "\tmov rsp, rbp\n"
             "\tpop rbp\n"
             "\tret\n"
-            "section .text\n" // Text Section
-            "\tglobal _start\n"
             "_start:\n"
             "\tpush rbp\n"
             "\tmov rbp, rsp\n",
@@ -100,7 +100,10 @@ void acg_postamble () {
            "\txor rax, rax\n"
            "\tmov rsp, rbp\n"
            "\tpop rbp\n"
-           "\tret\n",
+           "\tmov rax, 60\n"
+           "\tmov rdi, 0\n"
+           "\tsyscall\n",
+           //"\tret\n",
     Outfile);
 }
 
