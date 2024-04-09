@@ -1,6 +1,3 @@
-section .data
-    newline db 0xA
-
 section .text
     global _start
 
@@ -15,13 +12,6 @@ _start:
     pop rax ; gets the number 
 
     call _printInteger
-
-    ; Print newline
-    mov rax, 1
-    mov rdi, 1
-    mov rsi, newline
-    mov rdx, 1
-    Syscall
 
     mov rax, 60
     mov rdi, 0
