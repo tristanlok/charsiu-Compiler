@@ -4,7 +4,7 @@
 #include "generatecode.h"
 
 // Basically identical to the basic interpreter code
-static int generate(struct ASTnode *n) {
+static void generate(struct ASTnode *n) {
     // Generate the code under the left most node first
     if (n->left){
         generate(n->left);
