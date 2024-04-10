@@ -78,6 +78,12 @@ int scanChar(struct token *t) {
         case '/':
             t->tokenValue = T_DIV;
             break;
+        case '(':
+            t->tokenValue = T_LPAREN;
+            break;
+        case ')':
+            t->tokenValue = T_RPAREN;
+            break;
         default:
             if (isdigit(c)) {
                 t->intValue = getint(c);
