@@ -1,7 +1,12 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-static int operatorInfo[5][2] = {
+// For Associativity
+enum {
+    RIGHT, LEFT
+};
+
+static int operatorInfo[7][2] = {
 {1, LEFT}, // +
 {1, LEFT}, // -
 {2, LEFT}, // *

@@ -28,11 +28,4 @@ struct ASTnode {
   int intValue;
 };
 
-// Parser Info
-
-// For Associativity
-enum {
-    RIGHT, LEFT
-};
-
 #endif

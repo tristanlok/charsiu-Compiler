@@ -52,7 +52,7 @@ static struct ASTnode *getPrimaryNode() {
         // Deals with Expressions within Parentheses by call parseExpr again
         case T_LPAREN:
             scanChar(&Token);
-            n = parseExpr(1);
+            n = parseExpr(0);
             if (Token.tokenValue != T_RPAREN) {
                 printf("Syntax error on line %d. Unmatched ( \n", Line);
                 exit(1);
@@ -78,7 +78,7 @@ static struct ASTnode *parseExpr(int minPrec) { // Utilizing Precedence Climbing
 
     int operatorTokenvalue = Token.tokenValue;
 
-    while (Token.tokenValue != T_EOF && detPrec(operatorTokenvalue) > minPrec) {
+    while (Token.tokenValue != T_RPAREN && Token.tokenValue != T_EOF && detPrec(Token.tokenValue) > minPrec) {
         // calculate precedence and associativity of current token
         
         scanChar(&Token);
