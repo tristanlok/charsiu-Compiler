@@ -53,8 +53,9 @@ static struct ASTnode *getPrimaryNode() {
     }
 }
 
-struct ASTnode *makeTree(int prevTokPrec) {
+static struct ASTnode *parseExpr(int prevTokPrec) { // Utilizing Precedence Climbing Parsing with Expressions
     struct ASTnode *leftn, *rightn;
+
     int nodeValue;
 
     leftn = getPrimaryNode();
@@ -64,7 +65,7 @@ struct ASTnode *makeTree(int prevTokPrec) {
     while (Token.tokenValue != T_EOF && determinePrecedence(operatorTokenvalue) > prevTokPrec) {
         scanChar(&Token);
 
-        rightn = makeTree(determinePrecedence(operatorTokenvalue));
+        rightn = parseExpr(determinePrecedence(operatorTokenvalue));
 
         leftn = createNode(convertToken(operatorTokenvalue), leftn, rightn, 0);
 
@@ -74,3 +75,8 @@ struct ASTnode *makeTree(int prevTokPrec) {
     return leftn;
 
 }
+
+struct ASTnode *makeTree(int prevTokPrec) { // For later with the introduction of recursive descent parsers for functions
+    return parseExpr(prevTokPrec);
+}
+
