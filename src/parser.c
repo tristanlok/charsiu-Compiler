@@ -28,10 +28,12 @@ int convertToken(int tokenValue) {
             return N_TIMES;
         case T_DIV:
             return N_DIV;
-        case N_LPAREN:
+        case T_LPAREN:
             return N_LPAREN;
-        case N_RPAREN:
+        case T_RPAREN:
             return N_RPAREN;
+        case T_HAT:
+            return N_HAT;
         default:
             printf("Unknown token in on line %d\n", Line);
             exit(1);
