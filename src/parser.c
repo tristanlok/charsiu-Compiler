@@ -1,14 +1,12 @@
+#include "parser.h"
 #include "ast.h"
 #include "data.h"
 #include "lexer.h"
 #include "defs.h"
 
-static int operatorPrecedence[] = { 10, 10, 20, 20, 0, 0};
-//                                  +  -   *  /  INTLIT EOF
-
 // Ensures that the correct grammar syntax is used
-static int determinePrecedence(int tokenValue) {
-    int prec = operatorPrecedence[tokenValue];
+static int detPrec(int tokenValue) {
+    int prec = operatorInfo[tokenValue][0];
 
     if (prec == 0){
         printf("syntax error on line %d, token %d\n", Line, tokenValue);
@@ -17,6 +15,13 @@ static int determinePrecedence(int tokenValue) {
 
     return prec;
 }
+
+static int detAssoc(int tokenValue) {
+    int assoc = operatorInfo[tokenValue][1];
+
+    return assoc;
+}
+
 
 int convertToken(int tokenValue) {
     switch (tokenValue) {
@@ -44,6 +49,17 @@ static struct ASTnode *getPrimaryNode() {
     struct ASTnode *n;
 
     switch (Token.tokenValue) {
+        // Deals with Expressions within Parentheses by call parseExpr again
+        case T_LPAREN:
+            scanChar(&Token);
+            n = parseExpr(1);
+            if (Token.tokenValue != T_RPAREN) {
+                printf("Syntax error on line %d. Unmatched ( \n", Line);
+                exit(1);
+            }
+            scanChar(&Token);
+            return n;
+        // Creates the left node with the integer value
         case T_INTLIT:
             n = createLeaf(T_INTLIT, Token.intValue);
             scanChar(&Token); // Get next token
@@ -55,19 +71,19 @@ static struct ASTnode *getPrimaryNode() {
     }
 }
 
-static struct ASTnode *parseExpr(int prevTokPrec) { // Utilizing Precedence Climbing Parsing with Expressions
+static struct ASTnode *parseExpr(int minPrec) { // Utilizing Precedence Climbing Parsing with Expressions
     struct ASTnode *leftn, *rightn;
 
-    int nodeValue;
-
-    leftn = getPrimaryNode();
+    leftn = getPrimaryNode(); // This will also deal with any parentheses creating a sub tree before returning into the left node
 
     int operatorTokenvalue = Token.tokenValue;
 
-    while (Token.tokenValue != T_EOF && determinePrecedence(operatorTokenvalue) > prevTokPrec) {
+    while (Token.tokenValue != T_EOF && detPrec(operatorTokenvalue) > minPrec) {
+        // calculate precedence and associativity of current token
+
         scanChar(&Token);
 
-        rightn = parseExpr(determinePrecedence(operatorTokenvalue));
+        rightn = parseExpr(detPrec(operatorTokenvalue));
 
         leftn = createNode(convertToken(operatorTokenvalue), leftn, rightn, 0);
 

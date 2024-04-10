@@ -40,7 +40,7 @@ int main() {
 
     // Scans each token and creates an AST tree
     scanChar(&Token);
-    n = makeTree(0);
+    n = makeTree(1);
 
     // Interprets the AST Tree
     // printf("%d\n", interpretTree(n));
