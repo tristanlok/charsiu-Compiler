@@ -32,7 +32,7 @@ struct ASTnode {
 
 // For Associativity
 enum {
-    LEFT, RIGHT, NONE
+    RIGHT, LEFT
 };
 
 #endif

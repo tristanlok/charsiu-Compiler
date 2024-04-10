@@ -80,10 +80,10 @@ static struct ASTnode *parseExpr(int minPrec) { // Utilizing Precedence Climbing
 
     while (Token.tokenValue != T_EOF && detPrec(operatorTokenvalue) > minPrec) {
         // calculate precedence and associativity of current token
-
+        
         scanChar(&Token);
 
-        rightn = parseExpr(detPrec(operatorTokenvalue));
+        rightn = parseExpr(detPrec(operatorTokenvalue) + detAssoc(operatorTokenvalue)); // If Associativity is LEFT, it will add one to the precedence
 
         leftn = createNode(convertToken(operatorTokenvalue), leftn, rightn, 0);
 
