@@ -6,12 +6,13 @@ enum {
     RIGHT, LEFT
 };
 
+// Must be separated by 2 to account for associative (+1)
 static int operatorInfo[7][2] = {
 {1, LEFT}, // +
 {1, LEFT}, // -
-{2, LEFT}, // *
-{2, LEFT}, // /
-{3, RIGHT},// ^
+{3, LEFT}, // *
+{3, LEFT}, // /
+{5, RIGHT},// ^
 {0, 0},    // INTLIT
 {0, 0}     // EOF
 };
