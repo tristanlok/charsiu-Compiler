@@ -34,7 +34,7 @@ int convertToken(int tokenValue) {
         case T_DIV:
             return N_DIV;
         default:
-            printf("Unknown token in on line %d\n", Line);
+            printf("Unknown token in on line %d. Token value: %d\n", Line, tokenValue);
             exit(1);
     }
 }

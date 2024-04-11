@@ -1,11 +1,13 @@
 #ifndef DEFS_H
 #define DEFS_H
 
+// Token & Node Type have to match up
+
 // TOKEN
 
 // Token Type
 enum {
-  T_PLUS, T_MINUS, T_TIMES, T_DIV, T_LPAREN, T_RPAREN, T_INTLIT, T_EOF
+  T_PLUS, T_MINUS, T_TIMES, T_DIV, T_INTLIT, T_LPAREN, T_RPAREN, T_EOF
 };
 
 struct token {
@@ -18,7 +20,7 @@ struct token {
 
 // Node Type
 enum {
-  N_PLUS, N_MINUS, N_TIMES, N_DIV//, N_INTLIT
+  N_PLUS, N_MINUS, N_TIMES, N_DIV, N_INTLIT
 };
 
 struct ASTnode {
