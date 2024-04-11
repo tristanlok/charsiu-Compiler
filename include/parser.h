@@ -7,12 +7,11 @@ enum {
 };
 
 // Must be separated by 2 to account for associative (+1)
-static int operatorInfo[7][2] = {
+static int operatorInfo[6][2] = {
 {1, LEFT}, // +
 {1, LEFT}, // -
 {3, LEFT}, // *
 {3, LEFT}, // /
-{5, RIGHT},// ^
 {0, 0},    // INTLIT
 {0, 0}     // EOF
 };

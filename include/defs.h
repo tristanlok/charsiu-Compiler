@@ -5,7 +5,7 @@
 
 // Token Type
 enum {
-  T_PLUS, T_MINUS, T_TIMES, T_DIV, T_LPAREN, T_RPAREN, T_HAT, T_INTLIT, T_EOF
+  T_PLUS, T_MINUS, T_TIMES, T_DIV, T_LPAREN, T_RPAREN, T_INTLIT, T_EOF
 };
 
 struct token {
@@ -18,7 +18,7 @@ struct token {
 
 // Node Type
 enum {
-  N_PLUS, N_MINUS, N_TIMES, N_DIV, N_LPAREN, N_RPAREN, N_HAT, N_INTLIT
+  N_PLUS, N_MINUS, N_TIMES, N_DIV//, N_INTLIT
 };
 
 struct ASTnode {

@@ -32,6 +32,10 @@ static void generate(struct ASTnode *n) {
             acg_div();
             break;
         
+        case N_HAT:
+            acg_exp();
+            break;
+
         case N_INTLIT:
             acg_load(n->intValue);
             break;
