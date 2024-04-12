@@ -125,6 +125,12 @@ int lexScan(struct token *t) {
         case ';':
             t->tokenValue = T_SEMI;
             break;
+        case 39: // ASCII for '
+            t->tokenValue = T_SINQUOT;
+            break;
+        case 34: // ASCII for "
+            t->tokenValue = T_DBLQUOT;
+            break;
         default:
             // determine if its an integer value
             if (isdigit(c)) {
