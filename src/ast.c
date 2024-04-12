@@ -23,3 +23,10 @@ struct ASTnode *createLeaf(int tokenValue, int intValue) {
 struct ASTnode *createSingle(int tokenValue, struct ASTnode *left, int intValue) {
     return createNode(tokenValue, left, NULL, intValue);
 }
+
+int detNullTree(struct ASTnode *n) {
+    if (n->tokenValue == 0 && n->left == NULL && n->right == NULL && n->intValue == 0) {
+        return 1;
+    }
+    return 0;
+}

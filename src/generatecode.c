@@ -1,18 +1,18 @@
-#include "acg.h"
 #include "defs.h"
 #include "data.h"
 #include "generatecode.h"
+#include "acg.h"
 
 // Basically identical to the basic interpreter code
-static void generate(struct ASTnode *n) {
+void generateExprCode(struct ASTnode *n) {
     // Generate the code under the left most node first
     if (n->left){
-        generate(n->left);
+        generateExprCode(n->left);
     }
 
     // Generate the code under the right most node
     if (n->right){
-        generate(n->right);
+        generateExprCode(n->right);
     }
 
     switch (n->tokenValue) { 
@@ -42,10 +42,14 @@ static void generate(struct ASTnode *n) {
     }
 }
 
-void generateCode(struct ASTnode *n) {
+void gen_preamble() {
     acg_preamble();
-    generate(n);
+}
 
-    acg_printInt();
+void gen_postamble() {
     acg_postamble();
+}
+
+void gen_printint() {
+    acg_printInt();
 }

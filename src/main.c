@@ -39,16 +39,14 @@ int main() {
     // Reads the file
     Infile = fopen(path, "r");
 
-    // Scans each token and creates an AST tree
-    lexScan(&Token);
-    n = makeTree(0);
-
-    // Interprets the AST Tree
-    // printf("%d\n", interpretTree(n));
-    
     // Translates the AST Tree into Assembly x86-64 (NASM)
     Outfile = fopen("out.asm", "w");
-    generateCode(n);
+
+    lexScan(&Token);
+    gen_preamble();
+    parseCode();
+    gen_postamble();
+
     fclose(Outfile);
 
     system("nasm -f elf64 -o out.o out.asm"); // creates object file

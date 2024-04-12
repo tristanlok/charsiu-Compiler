@@ -9,7 +9,7 @@
 
 // Token Type
 enum {
-  T_PLUS, T_MINUS, T_TIMES, T_DIV, T_INTLIT, T_PRINT, T_LPAREN, T_RPAREN, T_EOF
+  T_PLUS, T_MINUS, T_TIMES, T_DIV, T_INTLIT, T_PRINT, T_SEMI, T_LPAREN, T_RPAREN, T_EOF
 };
 
 struct token {

@@ -26,6 +26,8 @@ static struct ASTnode *getPrimaryNode();
 
 static struct ASTnode *parseExpr(int minPrec);
 
-struct ASTnode *makeTree(int prevTokPrec);
+static struct ASTnode *call_print(struct ASTnode *tree);
+
+void parseCode();
 
 #endif

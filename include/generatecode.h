@@ -1,7 +1,10 @@
 #ifndef GENERATECODE_H
 #define GENERATECODE_H
 
-static void generate(struct ASTnode *n);
-void generateCode(struct ASTnode *n);
+void generateExprCode(struct ASTnode *n);
+
+void gen_preamble();
+void gen_postamble();
+void gen_printint();
 
 #endif

@@ -1,8 +1,11 @@
 #include "parser.h"
 #include "ast.h"
 #include "data.h"
+#include "generatecode.h"
 #include "lexer.h"
 #include "defs.h"
+
+// Expression Parser
 
 // Ensures that the correct grammar syntax is used
 static int detPrec(int tokenValue) {
@@ -28,7 +31,7 @@ static int detAssoc(int tokenValue) {
 }
 
 
-int convertToken(int tokenValue) {
+int verifyOpToken(int tokenValue) {
     switch (tokenValue) {
         case T_PLUS:
             return N_PLUS;
@@ -77,13 +80,13 @@ static struct ASTnode *parseExpr(int minPrec) { // Utilizing Precedence Climbing
 
     int operatorTokenvalue = Token.tokenValue;
 
-    while (Token.tokenValue != T_RPAREN && Token.tokenValue != T_EOF && detPrec(Token.tokenValue) > minPrec) {
+    while (Token.tokenValue != T_SEMI && Token.tokenValue != T_RPAREN && Token.tokenValue != T_EOF && detPrec(Token.tokenValue) > minPrec) {
         // calculate precedence and associativity of current token
         lexScan(&Token);
 
         rightn = parseExpr(detPrec(operatorTokenvalue) + detAssoc(operatorTokenvalue)); // If Associativity is LEFT, it will add one to the precedence
 
-        leftn = createNode(convertToken(operatorTokenvalue), leftn, rightn, 0);
+        leftn = createNode(verifyOpToken(operatorTokenvalue), leftn, rightn, 0);
 
         operatorTokenvalue = Token.tokenValue;
     }
@@ -92,7 +95,78 @@ static struct ASTnode *parseExpr(int minPrec) { // Utilizing Precedence Climbing
 
 }
 
-struct ASTnode *makeTree(int prevTokPrec) { // For later with the introduction of recursive descent parsers for functions
-    return parseExpr(prevTokPrec);
+// Statement Parser
+
+// Print
+
+static struct ASTnode *call_print(struct ASTnode *tree) {
+    lexScan(&Token);
+
+    if (Token.tokenValue == T_LPAREN) {
+        lexScan(&Token);
+
+        // Accounts for the edge case if print(); occurs
+        if (Token.tokenValue != T_RPAREN) {
+            tree = parseExpr(0);
+        
+        } else {
+            lexScan(&Token); // skip over ')'
+            return tree;
+        }
+        
+        if (Token.tokenValue != T_RPAREN) {
+            printf("Syntax error on line %d. print function missing ')'\n", Line);
+            exit(1);
+        }
+        
+        lexScan(&Token);
+
+        if (Token.tokenValue != T_SEMI) {
+            printf("Syntax error on line %d. Missing ';'\n", Line);
+            exit(1);
+        }
+
+        lexScan(&Token);
+
+        return tree;
+    
+    } else {
+        printf("Syntax error on line %d. print function missing '('\n", Line);
+        exit(1);
+    }
+}
+
+// Code Parser
+
+void parseCode() {
+    struct ASTnode *ast = createNode(0, NULL, NULL, 0); // Initialize AST variable
+
+    while (Token.tokenValue != T_EOF) {
+        switch (Token.tokenValue) {
+            case T_PRINT:
+                ast = call_print(ast);
+
+                // determine if ast is empty or not - ie. print(); (Edge case)
+                if (!detNullTree(ast)) {
+                    printf("bad1\n");
+                    generateExprCode(ast);
+                    gen_printint();
+                
+                } else {
+                    if (Token.tokenValue == T_SEMI) {
+                        lexScan(&Token);
+                    
+                    } else {
+                        printf("Syntax error on line %d. Missing ';'\n", Line);
+                        exit(1);
+                    }
+                }
+                break;
+
+            default:
+                printf("Syntax error on line %d. Token value: %d\n", Line, Token.tokenValue);
+                exit(1);
+        }
+    }
 }
 

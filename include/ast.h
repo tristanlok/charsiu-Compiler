@@ -7,4 +7,6 @@ struct ASTnode *createLeaf(int tokenValue, int intValue);
 
 struct ASTnode *createSingle(int tokenValue, struct ASTnode *left, int intValue);
 
+int detNullTree(struct ASTnode *n);
+
 #endif

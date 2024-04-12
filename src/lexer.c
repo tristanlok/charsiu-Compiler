@@ -1,5 +1,6 @@
 #include "defs.h"
 #include "data.h"
+#include <string.h>
 #include "lexer.h"
 
 static void putback(int c) {
@@ -57,10 +58,9 @@ static int getint(int c) {
     return val;
 }
 
-// declare in header
 // there is no need to clear identText before comparing as strcmp compares until != or reaches null terminator
 static int detKeyword () {
-    switch (identText[0]) {// use a switch case to optimize the search by automating the first character
+    switch (identText[0]) { // use a switch case to optimize the search by automating the first character
         case 'p':
             if (!strcmp(identText, "print")) { // if identifier is "print"
                 return T_PRINT;
@@ -123,6 +123,9 @@ int lexScan(struct token *t) {
         case ')':
             t->tokenValue = T_RPAREN;
             break;
+        case ';':
+            t->tokenValue = T_SEMI;
+            break;
         default:
             // determine if its an integer value
             if (isdigit(c)) {
@@ -140,6 +143,7 @@ int lexScan(struct token *t) {
                 // determines if identifier is a keyword
                 if ((tokenType = detKeyword())) {
                     t->tokenValue = tokenType;
+                    break;
                 }
 
                 // do nothing else for now, we will add non identifier conditions later on            
