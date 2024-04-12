@@ -138,12 +138,13 @@ int lexScan(struct token *t) {
                 int identLen = scanIdentifier(c);
 
                 // determines if identifier is a keyword
-                if (tokenType = detKeyword()) {
+                if ((tokenType = detKeyword())) {
                     t->tokenValue = tokenType;
                 }
 
-                // do nothing else for now, we will add non identifer conditions later on
-                
+                // do nothing else for now, we will add non identifier conditions later on            
+                printf("Unrecognised identifier %s on line %d\n", identText, Line);
+                exit(1);
             }
 
             printf("Unrecognised character %c on line %d\n", c, Line);
