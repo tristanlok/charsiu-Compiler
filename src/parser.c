@@ -6,20 +6,25 @@
 
 // Ensures that the correct grammar syntax is used
 static int detPrec(int tokenValue) {
-    int prec = operatorInfo[tokenValue][0];
-
-    if (prec == 0){
-        printf("syntax error on line %d, token %d\n", Line, tokenValue);
-        exit(1);
+    if (tokenValue < OP_LEN) {
+        int prec = operatorInfo[tokenValue][0];
+        
+        return prec;
     }
-
-    return prec;
+    
+    printf("Syntax error on line %d, token %d\n", Line, tokenValue);
+    exit(1);
 }
 
 static int detAssoc(int tokenValue) {
-    int assoc = operatorInfo[tokenValue][1];
-
-    return assoc;
+    if (tokenValue < OP_LEN) {
+        int assoc = operatorInfo[tokenValue][1];
+        
+        return assoc;
+    }
+    
+    printf("Syntax error on line %d, token %d\n", Line, tokenValue);
+    exit(1);
 }
 
 

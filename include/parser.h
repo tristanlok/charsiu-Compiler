@@ -6,14 +6,14 @@ enum {
     RIGHT, LEFT
 };
 
+#define OP_LEN 4
+
 // Must be separated by 2 to account for associative (+1)
-static int operatorInfo[6][2] = {
+static int operatorInfo[OP_LEN][2] = {
 {1, LEFT}, // +
 {1, LEFT}, // -
 {3, LEFT}, // *
 {3, LEFT}, // /
-{0, 0},    // INTLIT
-{0, 0}     // EOF
 };
 
 static int detPrec(int tokenValue);
