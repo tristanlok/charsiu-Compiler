@@ -13,6 +13,7 @@ int Putback;
 FILE *Infile;
 FILE *Outfile;
 struct token Token;
+char identText[IDENT_MAX_LEN + 1];
 
 // Initializing Functions
 static void init();
@@ -39,7 +40,7 @@ int main() {
     Infile = fopen(path, "r");
 
     // Scans each token and creates an AST tree
-    scanChar(&Token);
+    lexScan(&Token);
     n = makeTree(0);
 
     // Interprets the AST Tree

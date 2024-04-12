@@ -1,13 +1,15 @@
 #ifndef DEFS_H
 #define DEFS_H
 
+#define IDENT_MAX_LEN 512 // defines the constant max length of an identifier
+
 // Token & Node Type have to match up
 
 // TOKEN
 
 // Token Type
 enum {
-  T_PLUS, T_MINUS, T_TIMES, T_DIV, T_INTLIT, T_LPAREN, T_RPAREN, T_EOF
+  T_PLUS, T_MINUS, T_TIMES, T_DIV, T_INTLIT, T_PRINT, T_LPAREN, T_RPAREN, T_EOF
 };
 
 struct token {
