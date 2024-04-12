@@ -111,6 +111,16 @@ static struct ASTnode *call_print(struct ASTnode *tree) {
         
         } else {
             lexScan(&Token); // skip over ')'
+        
+            // Checks if the next token is ';'
+            if (Token.tokenValue == T_SEMI) {
+                lexScan(&Token);
+                
+            } else {
+                printf("Syntax error on line %d. Missing ';'\n", Line);
+                exit(1);
+            }
+
             return tree;
         }
         
@@ -150,16 +160,8 @@ void parseCode() {
                 if (!detNullTree(ast)) {
                     generateExprCode(ast);
                     gen_printint();
-                
-                } else {
-                    if (Token.tokenValue == T_SEMI) {
-                        lexScan(&Token);
-                    
-                    } else {
-                        printf("Syntax error on line %d. Missing ';'\n", Line);
-                        exit(1);
-                    }
                 }
+
                 break;
 
             default:

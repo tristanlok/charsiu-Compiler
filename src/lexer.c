@@ -1,6 +1,5 @@
 #include "defs.h"
 #include "data.h"
-#include <string.h>
 #include "lexer.h"
 
 static void putback(int c) {
