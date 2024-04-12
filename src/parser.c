@@ -148,7 +148,6 @@ void parseCode() {
 
                 // determine if ast is empty or not - ie. print(); (Edge case)
                 if (!detNullTree(ast)) {
-                    printf("bad1\n");
                     generateExprCode(ast);
                     gen_printint();
                 
