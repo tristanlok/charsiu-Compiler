@@ -1,9 +1,5 @@
 // Keep this here for now
 #include "defs.h"
-#include <stdio.h>
-#include <stdlib.h> 
-#include <string.h>
-#include <ctype.h>
 
 extern int Line; // Current Line
 extern int Putback; // If there is a character to put back

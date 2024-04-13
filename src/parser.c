@@ -63,7 +63,7 @@ static struct ASTnode *getPrimaryNode() {
             return n;
         // Creates the left node with the integer value
         case T_INTLIT:
-            n = createLeaf(T_INTLIT, Token.intValue);
+            n = createExprLeaf(T_INTLIT, Token.intValue);
             lexScan(&Token); // Get next token
             return n;
 
@@ -86,7 +86,7 @@ static struct ASTnode *parseExpr(int minPrec) { // Utilizing Precedence Climbing
 
         rightn = parseExpr(detPrec(operatorTokenvalue) + detAssoc(operatorTokenvalue)); // If Associativity is LEFT, it will add one to the precedence
 
-        leftn = createNode(verifyOpToken(operatorTokenvalue), leftn, rightn, 0);
+        leftn = createExprNode(verifyOpToken(operatorTokenvalue), leftn, rightn, 0);
 
         operatorTokenvalue = Token.tokenValue;
     }
@@ -149,7 +149,7 @@ static struct ASTnode *call_print(struct ASTnode *tree) {
 // Code Parser
 
 void parseCode() {
-    struct ASTnode *ast = createNode(0, NULL, NULL, 0); // Initialize AST variable
+    struct ASTnode *ast = createExprNode(0, NULL, NULL, 0); // Initialize AST variable
 
     while (Token.tokenValue != T_EOF) {
         switch (Token.tokenValue) {

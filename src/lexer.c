@@ -127,9 +127,11 @@ int lexScan(struct token *t) {
             break;
         case 39: // ASCII for '
             t->tokenValue = T_SINQUOT;
+            //get_str(1);
             break;
         case 34: // ASCII for "
             t->tokenValue = T_DBLQUOT;
+            //get_str(STR_MAX_LEN);
             break;
         default:
             // determine if its an integer value

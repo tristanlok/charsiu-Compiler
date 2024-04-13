@@ -4,6 +4,11 @@
 #define IDENT_MAX_LEN 512 // defines the constant max length of an identifier
 #define STR_MAX_LEN 512 // defines the max length of strings to be 512 characters
 
+#include <stdio.h>
+#include <stdlib.h> 
+#include <string.h>
+#include <ctype.h>
+
 // Token & Node Type have to match up
 
 // TOKEN
