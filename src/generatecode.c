@@ -16,23 +16,23 @@ void generateExprCode(struct ASTnode *n) {
     }
 
     switch (n->tokenValue) { 
-        case N_PLUS:
+        case PLUS:
             acg_add();
             break;
 
-        case N_MINUS:
+        case MINUS:
             acg_minus();
             break;
 
-        case N_TIMES:
+        case TIMES:
             acg_times();
             break;
 
-        case N_DIV:
+        case DIV:
             acg_div();
             break;
         
-        case N_INTLIT:
+        case INT_VALUE:
             acg_load(n->intValue);
             break;
 

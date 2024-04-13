@@ -62,7 +62,7 @@ static int detKeyword () {
     switch (identText[0]) { // use a switch case to optimize the search by automating the first character
         case 'p':
             if (!strcmp(identText, "print")) { // if identifier is "print"
-                return T_PRINT;
+                return PRINT;
             }
             // more can be added here later
             break; 
@@ -105,39 +105,37 @@ int lexScan(struct token *t) {
             t->tokenValue = T_EOF;
             break;
         case '+':
-            t->tokenValue = T_PLUS;
+            t->tokenValue = PLUS;
             break;
         case '-':
-            t->tokenValue = T_MINUS;
+            t->tokenValue = MINUS;
             break;
         case '*':
-            t->tokenValue = T_TIMES;
+            t->tokenValue = TIMES;
             break;
         case '/':
-            t->tokenValue = T_DIV;
+            t->tokenValue = DIV;
             break;
         case '(':
-            t->tokenValue = T_LPAREN;
+            t->tokenValue = L_PAREN;
             break;
         case ')':
-            t->tokenValue = T_RPAREN;
+            t->tokenValue = R_PAREN;
             break;
         case ';':
-            t->tokenValue = T_SEMI;
+            t->tokenValue = SEMI;
             break;
         case 39: // ASCII for '
-            t->tokenValue = T_SINQUOT;
             //get_str(1);
             break;
         case 34: // ASCII for "
-            t->tokenValue = T_DBLQUOT;
             //get_str(STR_MAX_LEN);
             break;
         default:
             // determine if its an integer value
             if (isdigit(c)) {
                 t->intValue = getint(c);
-                t->tokenValue = T_INTLIT;
+                t->tokenValue = INT_VALUE;
                 break;
             
             // determine if its an identifier

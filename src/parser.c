@@ -30,40 +30,23 @@ static int detAssoc(int tokenValue) {
     exit(1);
 }
 
-
-int verifyOpToken(int tokenValue) {
-    switch (tokenValue) {
-        case T_PLUS:
-            return N_PLUS;
-        case T_MINUS:
-            return N_MINUS;
-        case T_TIMES:
-            return N_TIMES;
-        case T_DIV:
-            return N_DIV;
-        default:
-            printf("Unknown token in on line %d. Token value: %d\n", Line, tokenValue);
-            exit(1);
-    }
-}
-
 static struct ASTnode *getPrimaryNode() {
     struct ASTnode *n;
 
     switch (Token.tokenValue) {
         // Deals with Expressions within Parentheses by call parseExpr again
-        case T_LPAREN:
+        case L_PAREN:
             lexScan(&Token);
             n = parseExpr(0);
-            if (Token.tokenValue != T_RPAREN) {
+            if (Token.tokenValue != R_PAREN) {
                 printf("Syntax error on line %d. Unmatched ( \n", Line);
                 exit(1);
             }
             lexScan(&Token);
             return n;
         // Creates the left node with the integer value
-        case T_INTLIT:
-            n = createExprLeaf(T_INTLIT, Token.intValue);
+        case INT_VALUE:
+            n = createExprLeaf(INT_VALUE, Token.intValue);
             lexScan(&Token); // Get next token
             return n;
 
@@ -80,13 +63,13 @@ static struct ASTnode *parseExpr(int minPrec) { // Utilizing Precedence Climbing
 
     int operatorTokenvalue = Token.tokenValue;
 
-    while (Token.tokenValue != T_SEMI && Token.tokenValue != T_RPAREN && Token.tokenValue != T_EOF && detPrec(Token.tokenValue) > minPrec) {
+    while (Token.tokenValue != SEMI && Token.tokenValue != R_PAREN && Token.tokenValue != T_EOF && detPrec(Token.tokenValue) > minPrec) {
         // calculate precedence and associativity of current token
         lexScan(&Token);
 
         rightn = parseExpr(detPrec(operatorTokenvalue) + detAssoc(operatorTokenvalue)); // If Associativity is LEFT, it will add one to the precedence
 
-        leftn = createExprNode(verifyOpToken(operatorTokenvalue), leftn, rightn, 0);
+        leftn = createExprNode(operatorTokenvalue, leftn, rightn, 0);
 
         operatorTokenvalue = Token.tokenValue;
     }
@@ -102,18 +85,18 @@ static struct ASTnode *parseExpr(int minPrec) { // Utilizing Precedence Climbing
 static struct ASTnode *call_print(struct ASTnode *tree) {
     lexScan(&Token);
 
-    if (Token.tokenValue == T_LPAREN) {
+    if (Token.tokenValue == L_PAREN) {
         lexScan(&Token);
 
         // Accounts for the edge case if print(); occurs
-        if (Token.tokenValue != T_RPAREN) {
+        if (Token.tokenValue != R_PAREN) {
             tree = parseExpr(0);
         
         } else {
             lexScan(&Token); // skip over ')'
         
             // Checks if the next token is ';'
-            if (Token.tokenValue == T_SEMI) {
+            if (Token.tokenValue == SEMI) {
                 lexScan(&Token);
                 
             } else {
@@ -124,14 +107,14 @@ static struct ASTnode *call_print(struct ASTnode *tree) {
             return tree;
         }
         
-        if (Token.tokenValue != T_RPAREN) {
+        if (Token.tokenValue != R_PAREN) {
             printf("Syntax error on line %d. print function missing ')'\n", Line);
             exit(1);
         }
         
         lexScan(&Token);
 
-        if (Token.tokenValue != T_SEMI) {
+        if (Token.tokenValue != SEMI) {
             printf("Syntax error on line %d. Missing ';'\n", Line);
             exit(1);
         }
@@ -153,7 +136,7 @@ void parseCode() {
 
     while (Token.tokenValue != T_EOF) {
         switch (Token.tokenValue) {
-            case T_PRINT:
+            case PRINT:
                 ast = call_print(ast);
 
                 // determine if ast is empty or not - ie. print(); (Edge case)

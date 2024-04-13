@@ -18,19 +18,19 @@ int interpretTree(struct ASTnode *n) {
     }
 
     switch (n->tokenValue) {
-        case N_PLUS:
+        case PLUS:
             return (leftValue + rightValue);
 
-        case N_MINUS:
+        case MINUS:
             return (leftValue - rightValue);
 
-        case N_TIMES:
+        case TIMES:
             return (leftValue * rightValue);
 
-        case N_DIV:
+        case DIV:
             return (leftValue / rightValue);
         
-        case N_INTLIT:
+        case INT_VALUE:
             return n->intValue;
 
         default:

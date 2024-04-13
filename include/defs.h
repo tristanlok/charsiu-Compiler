@@ -9,13 +9,21 @@
 #include <string.h>
 #include <ctype.h>
 
-// Token & Node Type have to match up
-
 // TOKEN
 
 // Token Type
 enum {
-  T_PLUS, T_MINUS, T_TIMES, T_DIV, T_INTLIT, T_PRINT, T_SINQUOT, T_DBLQUOT, T_SEMI, T_LPAREN, T_RPAREN, T_EOF
+    // Single-Character Tokens
+    PLUS, MINUS, TIMES, DIV, SEMI, L_PAREN, R_PAREN, 
+
+    // Literals
+    IDENTIFIER, INT_VALUE, STR_ARR,
+
+    // Keywords
+    PRINT,
+
+
+    T_EOF
 };
 
 struct token {
@@ -25,11 +33,6 @@ struct token {
 
 
 //ABSTRACT SYNTAX TREE
-
-// Node Type
-enum {
-  N_PLUS, N_MINUS, N_TIMES, N_DIV, N_INTLIT
-};
 
 struct ASTnode {
   int tokenValue;
