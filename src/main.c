@@ -14,6 +14,7 @@ FILE *Infile;
 FILE *Outfile;
 struct token Token;
 char identText[IDENT_MAX_LEN + 1];
+char stringData[STR_MAX_LEN];
 
 // Initializing Functions
 static void init();

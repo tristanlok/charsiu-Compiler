@@ -2,7 +2,7 @@
 #define DEFS_H
 
 #define IDENT_MAX_LEN 512 // defines the constant max length of an identifier
-#define STR_MAX_LEN 512 // defines the max length of strings to be 512 characters
+#define STR_MAX_LEN 2048 // defines the max length of strings to be 512 characters
 
 #include <stdio.h>
 #include <stdlib.h> 
@@ -29,6 +29,7 @@ enum {
 struct token {
     int tokenValue;
     int intValue;
+    char *strPointer;
 };
 
 

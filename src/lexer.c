@@ -16,6 +16,8 @@ static int getNext(void){
     }
 
     c = fgetc(Infile);
+    //printf("%c, %d\n", c, c); // KEEP THIS FOR TESTING
+    
     if (c == '\n'){
         Line++;
     }
@@ -76,14 +78,14 @@ static int scanIdentifier (int c) {
     int idx = 0;
 
     while (isalpha(c) || isdigit(c) || c == '_') {
-        if (IDENT_MAX_LEN - 1 == idx) { // -1 since idx starts at 0
-            printf("Identifier is too long, Line %d\n", Line);
-            exit(1);
-        }
-        
         identText[idx++] = c; // array[i++] increments the value of i. The expression evaluates to array[i], before i has been incremented.
 
         c = getNext(); // get next character
+                       //
+        if (IDENT_MAX_LEN == idx) {
+            printf("Identifier has exceeded the %d character limit, Line %d\n", IDENT_MAX_LEN, Line);
+            exit(1);
+        }
     }
 
     // Putback the last character since it is not valid
@@ -93,6 +95,47 @@ static int scanIdentifier (int c) {
     identText[idx] = '\0';
 
     return idx; // return the length of identifier
+}
+
+// Add to header file
+static int getStr(int max, int symbol) {
+    int size = 0;
+    int c = getNext(); // Grabs the next character
+    int escapeChr = 0;
+
+    while (c != symbol) {
+        if (c == '\n') {
+            printf("Syntax error, Missing closing quotation, line %d\n", Line);
+            exit(1);
+        }
+
+        if (c == 92) { // Does c == \ (Escape Sequence)
+            c = getNext();
+            
+            // case for supported escape sequences
+            if (c == 'n' || c == 't' || c == 92 || c == 34 || c == 39 || c == '?') {
+                stringData[size++] = 92; // add \ into string
+                escapeChr += 1;
+
+            } else {
+                printf("Unsupported Escape Sequence on line %d\n", Line);
+                exit(1);
+            }
+        }
+
+        stringData[size++] = c;
+
+        c = getNext();
+
+        if (max == size) {
+            printf("String has exceeded the %d character limit, Line %d\n", max, Line);
+            exit(1);
+        }
+    }
+
+    c = getNext(); // Moves past the Quotation mark
+
+    return (size - escapeChr); // Escape Sequences count as 1 character
 }
 
 int lexScan(struct token *t) {
@@ -125,12 +168,30 @@ int lexScan(struct token *t) {
         case ';':
             t->tokenValue = SEMI;
             break;
-        case 39: // ASCII for '
-            //get_str(1);
+        case 39: { // ASCII for '
+            t->tokenValue = STR_ARR;
+            
+            int size = getStr(1, 39);
+
+            char tempString[size];
+
+            memcpy(tempString, stringData, size * sizeof(char));
+
+            t->strPointer = tempString;
             break;
-        case 34: // ASCII for "
-            //get_str(STR_MAX_LEN);
+        }
+        case 34: { // ASCII for "
+            t->tokenValue = STR_ARR;
+            
+            int size = getStr(STR_MAX_LEN, 34);
+
+            char tempString[size];
+
+            memcpy(tempString, stringData, size * sizeof(char));
+
+            t->strPointer = tempString;
             break;
+        }
         default:
             // determine if its an integer value
             if (isdigit(c)) {
