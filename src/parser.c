@@ -5,6 +5,7 @@
 #include "lexer.h"
 #include "defs.h"
 #include "helper.h"
+#include "stmt.h"
 
 
 // Expression Parser
@@ -82,44 +83,35 @@ static struct ASTnode *parseExpr(int minPrec) { // Utilizing Precedence Climbing
 
 // Statement Parser
 
-// Print
-
-static struct ASTnode *call_print(struct ASTnode *tree) {
+struct ASTnode *print_stmt() {
     if (next_token(L_PAREN)) {
-        // Accounts for the edge case if print(); occurs
-        if (!next_token(R_PAREN)) {
-            tree = parseExpr(0);
-        
-        } else {
-            // Checks if the next token is ';'
-            if (next_token(SEMI)) {
-                lexScan(&Token);
-                
-            } else {
-                printf("Syntax error on line %d. Missing ';'\n", Line);
-                exit(1);
+        while (!next_token(R_PAREN)) {
+            // Not supposed to be here, leave for now
+            if (!is_token(PLUS)) {
+                break; // SYNTAX ERROR
             }
 
-            return tree;
+            switch (Token.tokenValue) {
+                case STR_ARR: // Terminal
+                    break;
+                case INT_VALUE: // Terminal
+                    return
+                case L_PAREN: // Non Terminal
+                    lexScan(&Token);
+                    return stmt();
+                default:
+                    break; // Parsing Error
+            }
         }
-        
-        if (!is_token(R_PAREN)) {
-            printf("Syntax error on line %d. print function missing ')'\n", Line);
-            exit(1);
-        }
-        
-        if (!next_token(SEMI)) {
-            printf("Syntax error on line %d. Missing ';'\n", Line);
-            exit(1);
-        }
+    }
+}
 
-        lexScan(&Token);
-
-        return tree;
-    
-    } else {
-        printf("Syntax error on line %d. print function missing '('\n", Line);
-        exit(1);
+struct ASTnode *stmt() {
+    switch (Token.tokenValue) {
+        case PRINT:
+            return print_stmt();
+        default:
+            return parseExpr(0);
     }
 }
 

@@ -20,7 +20,7 @@ enum {
     IDENTIFIER, INT_VALUE, STR_ARR,
 
     // Keywords
-    PRINT, PRINTLN,
+    PRINT,
 
 
     T_EOF

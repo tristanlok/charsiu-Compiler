@@ -16,9 +16,27 @@
 #include "defs.h"
 #include "data.h"
 #include "helper.h"
+#include "lexer.h"
 
 struct ASTnode *print_stmt() {
     if (next_token(L_PAREN)) {
-        
+        while (!next_token(R_PAREN)) {
+            // Not supposed to be here, leave for now
+            if (!is_token(PLUS)) {
+                break; // SYNTAX ERROR
+            }
 
+            switch (Token.tokenValue) {
+                case STR_ARR: // Terminal
+                    break;
+                case INT_VALUE: // Terminal
+                    break;
+                case L_PAREN: // Non Terminal
+                    lexScan(&Token);
+                    return 
+                default:
+                    break; // Parsing Error
+            }
+        }
+    }
 }
