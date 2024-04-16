@@ -63,7 +63,10 @@ static int getint(int c) {
 static int detKeyword () {
     switch (identText[0]) { // use a switch case to optimize the search by automating the first character
         case 'p':
-            if (!strcmp(identText, "print")) { // if identifier is "print"
+            if (!strcmp(identText, "println")) {
+                return PRINTLN;
+            }
+            else if (!strcmp(identText, "print")) { // if identifier is "print"
                 return PRINT;
             }
             // more can be added here later

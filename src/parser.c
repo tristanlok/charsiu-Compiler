@@ -4,6 +4,8 @@
 #include "generatecode.h"
 #include "lexer.h"
 #include "defs.h"
+#include "helper.h"
+
 
 // Expression Parser
 
@@ -38,7 +40,7 @@ static struct ASTnode *getPrimaryNode() {
         case L_PAREN:
             lexScan(&Token);
             n = parseExpr(0);
-            if (Token.tokenValue != R_PAREN) {
+            if (is_token(R_PAREN)) {
                 printf("Syntax error on line %d. Unmatched ( \n", Line);
                 exit(1);
             }
@@ -63,7 +65,7 @@ static struct ASTnode *parseExpr(int minPrec) { // Utilizing Precedence Climbing
 
     int operatorTokenvalue = Token.tokenValue;
 
-    while (Token.tokenValue != SEMI && Token.tokenValue != R_PAREN && Token.tokenValue != T_EOF && detPrec(Token.tokenValue) > minPrec) {
+    while (is_token(SEMI) && is_token(R_PAREN) && is_token(T_EOF) && detPrec(Token.tokenValue) > minPrec) {
         // calculate precedence and associativity of current token
         lexScan(&Token);
 
@@ -83,20 +85,14 @@ static struct ASTnode *parseExpr(int minPrec) { // Utilizing Precedence Climbing
 // Print
 
 static struct ASTnode *call_print(struct ASTnode *tree) {
-    lexScan(&Token);
-
-    if (Token.tokenValue == L_PAREN) {
-        lexScan(&Token);
-
+    if (next_token(L_PAREN)) {
         // Accounts for the edge case if print(); occurs
-        if (Token.tokenValue != R_PAREN) {
+        if (!next_token(R_PAREN)) {
             tree = parseExpr(0);
         
         } else {
-            lexScan(&Token); // skip over ')'
-        
             // Checks if the next token is ';'
-            if (Token.tokenValue == SEMI) {
+            if (next_token(SEMI)) {
                 lexScan(&Token);
                 
             } else {
@@ -107,14 +103,12 @@ static struct ASTnode *call_print(struct ASTnode *tree) {
             return tree;
         }
         
-        if (Token.tokenValue != R_PAREN) {
+        if (!is_token(R_PAREN)) {
             printf("Syntax error on line %d. print function missing ')'\n", Line);
             exit(1);
         }
         
-        lexScan(&Token);
-
-        if (Token.tokenValue != SEMI) {
+        if (!next_token(SEMI)) {
             printf("Syntax error on line %d. Missing ';'\n", Line);
             exit(1);
         }
@@ -130,11 +124,10 @@ static struct ASTnode *call_print(struct ASTnode *tree) {
 }
 
 // Code Parser
-
 void parseCode() {
     struct ASTnode *ast = createExprNode(0, NULL, NULL, 0); // Initialize AST variable
 
-    while (Token.tokenValue != T_EOF) {
+    while (!is_token(T_EOF)) {
         switch (Token.tokenValue) {
             case PRINT:
                 ast = call_print(ast);

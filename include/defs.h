@@ -20,7 +20,7 @@ enum {
     IDENTIFIER, INT_VALUE, STR_ARR,
 
     // Keywords
-    PRINT,
+    PRINT, PRINTLN,
 
 
     T_EOF
@@ -31,7 +31,6 @@ struct token {
     int intValue;
     char *strPointer;
 };
-
 
 //ABSTRACT SYNTAX TREE
 
