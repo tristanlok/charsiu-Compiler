@@ -26,19 +26,32 @@ enum {
     T_EOF
 };
 
-struct token {
+struct token{
     int tokenValue;
-    int intValue;
-    char *strPointer;
+    union {
+        int intValue;
+        char *strPointer;
+    };
 };
 
 //ABSTRACT SYNTAX TREE
 
-struct ASTnode {
-  int tokenValue;
-  struct ASTnode *left;
-  struct ASTnode *right;
-  int intValue;
+struct Node{
+    int tokenValue;
+
+    union {
+        // Binary Operators
+        struct {
+            struct Node *left;
+            struct Node *right;
+        };
+
+        // Integer Lit
+        int intValue;
+
+        // String Lit
+        char *strPointer;
+    };
 };
 
 #endif

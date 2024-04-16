@@ -18,7 +18,7 @@
 #include "helper.h"
 #include "lexer.h"
 
-struct ASTnode *print_stmt() {
+struct Node *print_stmt() {
     if (next_token(L_PAREN)) {
         while (!next_token(R_PAREN)) {
             // Not supposed to be here, leave for now

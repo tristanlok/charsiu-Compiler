@@ -1,9 +1,7 @@
 #include "defs.h"
 #include "data.h"
 
-//#include "ast.h" Add back if needed
 #include "lexer.h"
-#include "interpreter.h"
 #include "parser.h"
 #include "generatecode.h"
 
@@ -28,7 +26,7 @@ static void init() {
 }
 
 int main() {
-    struct ASTnode *n;
+    struct Node *n;
 
     init();
 

@@ -1,7 +1,7 @@
 #ifndef GENERATECODE_H
 #define GENERATECODE_H
 
-void generateExprCode(struct ASTnode *n);
+void generateExprCode(struct Node *n);
 
 void gen_preamble();
 void gen_postamble();

@@ -22,11 +22,11 @@ static int detAssoc(int tokenValue);
 
 int convertToken(int tokenValue);
 
-static struct ASTnode *getPrimaryNode();
+static struct Node *getPrimaryNode();
 
-static struct ASTnode *parseExpr(int minPrec);
+static struct Node *parseExpr(int minPrec);
 
-static struct ASTnode *call_print(struct ASTnode *tree);
+static struct Node *call_print();
 
 void parseCode();
 

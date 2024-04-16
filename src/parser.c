@@ -33,8 +33,8 @@ static int detAssoc(int tokenValue) {
     exit(1);
 }
 
-static struct ASTnode *getPrimaryNode() {
-    struct ASTnode *n;
+static struct Node *getPrimaryNode() {
+    struct Node *n;
 
     switch (Token.tokenValue) {
         // Deals with Expressions within Parentheses by call parseExpr again
@@ -49,7 +49,7 @@ static struct ASTnode *getPrimaryNode() {
             return n;
         // Creates the left node with the integer value
         case INT_VALUE:
-            n = createExprLeaf(INT_VALUE, Token.intValue);
+            n = createIntLeaf(INT_VALUE, Token.intValue);
             lexScan(&Token); // Get next token
             return n;
 
@@ -59,8 +59,8 @@ static struct ASTnode *getPrimaryNode() {
     }
 }
 
-static struct ASTnode *parseExpr(int minPrec) { // Utilizing Precedence Climbing Parsing with Expressions
-    struct ASTnode *leftn, *rightn;
+static struct Node *parseExpr(int minPrec) { // Utilizing Precedence Climbing Parsing with Expressions
+    struct Node *leftn, *rightn;
 
     leftn = getPrimaryNode(); // This will also deal with any parentheses creating a sub tree before returning into the left node
 
@@ -72,7 +72,7 @@ static struct ASTnode *parseExpr(int minPrec) { // Utilizing Precedence Climbing
 
         rightn = parseExpr(detPrec(operatorTokenvalue) + detAssoc(operatorTokenvalue)); // If Associativity is LEFT, it will add one to the precedence
 
-        leftn = createExprNode(operatorTokenvalue, leftn, rightn, 0);
+        leftn = createOpNode(operatorTokenvalue, leftn, rightn);
 
         operatorTokenvalue = Token.tokenValue;
     }
@@ -83,7 +83,7 @@ static struct ASTnode *parseExpr(int minPrec) { // Utilizing Precedence Climbing
 
 // Statement Parser
 
-struct ASTnode *print_stmt() {
+struct Node *print_stmt() {
     if (next_token(L_PAREN)) {
         while (!next_token(R_PAREN)) {
             // Not supposed to be here, leave for now
@@ -95,7 +95,7 @@ struct ASTnode *print_stmt() {
                 case STR_ARR: // Terminal
                     break;
                 case INT_VALUE: // Terminal
-                    return
+                    break;
                 case L_PAREN: // Non Terminal
                     lexScan(&Token);
                     return stmt();
@@ -106,7 +106,7 @@ struct ASTnode *print_stmt() {
     }
 }
 
-struct ASTnode *stmt() {
+struct Node *stmt() {
     switch (Token.tokenValue) {
         case PRINT:
             return print_stmt();
@@ -117,12 +117,12 @@ struct ASTnode *stmt() {
 
 // Code Parser
 void parseCode() {
-    struct ASTnode *ast = createExprNode(0, NULL, NULL, 0); // Initialize AST variable
+    struct Node *ast;
 
     while (!is_token(T_EOF)) {
         switch (Token.tokenValue) {
             case PRINT:
-                ast = call_print(ast);
+                //ast = call_print(ast);
 
                 // determine if ast is empty or not - ie. print(); (Edge case)
                 if (!detNullTree(ast)) {

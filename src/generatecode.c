@@ -4,7 +4,7 @@
 #include "acg.h"
 
 // Basically identical to the basic interpreter code
-void generateExprCode(struct ASTnode *n) {
+void generateExprCode(struct Node *n) {
     // Generate the code under the left most node first
     if (n->left){
         generateExprCode(n->left);

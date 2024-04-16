@@ -1,12 +1,10 @@
 #ifndef AST_H
 #define AST_H
 
-struct ASTnode *createExprNode(int tokenValue, struct ASTnode *left, struct ASTnode *right, int intValue);
+static struct Node *createNode();
 
-struct ASTnode *createExprLeaf(int tokenValue, int intValue);
+struct Node *createOpNode(int tokenValue, struct Node *left, struct Node *right);
 
-struct ASTnode *createExprSingle(int tokenValue, struct ASTnode *left, int intValue);
-
-int detNullTree(struct ASTnode *n);
+struct Node *createIntLeaf(int tokenValue, int intValue);
 
 #endif
