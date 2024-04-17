@@ -14,13 +14,13 @@
 // Token Type
 enum {
     // Single-Character Tokens
-    PLUS, MINUS, TIMES, DIV, SEMI, L_PAREN, R_PAREN, 
+    PLUS, MINUS, TIMES, DIV, SEMI, L_PAREN, R_PAREN, COMMA,
 
     // Literals
     IDENTIFIER, INT_VALUE, STR_ARR,
 
     // Keywords
-    PRINT,
+    EXPR, PRINT,
 
 
     T_EOF
@@ -30,7 +30,11 @@ struct token{
     int tokenValue;
     union {
         int intValue;
-        char *strPointer;
+        
+        struct {
+            char *strPointer;
+            int args;
+        };
     };
 };
 
@@ -46,11 +50,17 @@ struct Node{
             struct Node *right;
         };
 
+        // Format Strings
+        struct {
+            char *strPointer;
+            struct Node *strTail;
+        };
+
         // Integer Lit
-        int intValue;
+        int intLit;
 
         // String Lit
-        char *strPointer;
+        char *strLit;
 
         // Statement tails
         struct Node *tail;

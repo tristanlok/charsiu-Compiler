@@ -34,22 +34,24 @@ static struct Node *getPrimaryNode() {
     }
 }
 
-static struct Node *parsePrintExpr(int minPrec) {
+static struct Node *parsePrintArgs(int minPrec, int *args) {
     struct Node *leftn, *rightn;
 
     leftn = getPrimaryNode(); // This will also deal with any parentheses creating a sub tree before returning into the left node
 
     while (!is_token(R_PAREN) && 1 > minPrec) {
-        if (!is_token(PLUS)) {
-            missing_err("+");
+        if (!is_token(COMMA)) {
+            missing_err(",");
         }
 
         // calculate precedence and associativity of current token
         lexScan(&Token);
 
-        rightn = parsePrintExpr(2); // If Associativity is LEFT, it will add one to the precedence
+        args -= 1;
 
-        leftn = createOpNode(PLUS, leftn, rightn);
+        rightn = parsePrintArgs(2, args); // If Associativity is LEFT, it will add one to the precedence
+
+        leftn = createOpNode(COMMA, leftn, rightn);
         
     }
 
@@ -57,14 +59,20 @@ static struct Node *parsePrintExpr(int minPrec) {
 }
 
 struct Node *print_stmt() {
-    struct Node *n = createStmtNode(PRINT, NULL);
     if (next_token(L_PAREN)) {
-        n->tail = parsePrintExpr(0);
+        if (next_token(STR_ARR)) {
+            struct Node *n = createStrNode(STR_ARR, Token.strPointer, NULL);
+            int args = Token.args;
+            n->tail = parsePrintArgs(0, &args);
+            if (args != 0) {
+                printf("Too little or Too many arguments presented to print");
+                exit(1);
+            }
         if (!is_token(R_PAREN)) {
             missing_err(")");
         }
         lexScan(&Token);
-        return n;
+        return createStmtNode(PRINT, n);
 
     } else {
         missing_err("(");

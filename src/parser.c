@@ -62,7 +62,7 @@ static struct Node *parseExpr(int minPrec) { // Utilizing Precedence Climbing Pa
 
     int operatorTokenvalue = Token.tokenValue;
 
-    while (!is_token(R_PAREN) && detPrec(Token.tokenValue) > minPrec) {
+    while (!is_token(COMMA) && !is_token(R_PAREN) && detPrec(Token.tokenValue) > minPrec) {
         // calculate precedence and associativity of current token
         lexScan(&Token);
 
@@ -82,7 +82,7 @@ struct Node *stmt() {
         case PRINT:
             return print_stmt();
         default:
-            return parseExpr(0);
+            return createStmtNode(EXPR, parseExpr(0));
     }
 }
 

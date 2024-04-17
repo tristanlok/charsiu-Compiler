@@ -19,7 +19,7 @@ struct Node *createIntLeaf(int tokenValue, int intValue) {
     struct Node *n = createNode();
 
     n->tokenValue = tokenValue;
-    n->tokenValue = intValue;
+    n->intLit = intValue;
 
     return n;
 }
@@ -28,7 +28,17 @@ struct Node *createStrLeaf(int tokenValue, char *str) {
     struct Node *n = createNode();
 
     n->tokenValue = tokenValue;
+    n->strLit = str;
+
+    return n;
+}
+
+struct Node *createStrNode(int tokenValue, char *str, struct Node *tail) {
+    struct Node *n = createNode();
+
+    n->tokenValue = tokenValue;
     n->strPointer = str;
+    n->strTail = tail;
 
     return n;
 }

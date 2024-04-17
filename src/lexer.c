@@ -98,7 +98,7 @@ static int scanIdentifier (int c) {
 }
 
 // Add to header file
-static int getStr(int max, int symbol) {
+static int getStr(int max, int symbol, int *args) {
     int size = 0;
     int c = getNext(); // Grabs the next character
     int escapeChr = 0;
@@ -120,6 +120,15 @@ static int getStr(int max, int symbol) {
             } else {
                 printf("Unsupported Escape Sequence on line %d\n", Line);
                 exit(1);
+            }
+        
+        } else if (c == '%') {
+            c = getNext();
+            
+            stringData[size++] = '%';
+
+            if (c == 'i' || c == 's') {
+                args += 1;
             }
         }
 
@@ -165,31 +174,40 @@ int lexScan(struct token *t) {
         case ')':
             t->tokenValue = R_PAREN;
             break;
+        case ',':
+            t->tokenValue = COMMA;
+            break;
         case ';':
             t->tokenValue = SEMI;
             break;
         case 39: { // ASCII for '
             t->tokenValue = STR_ARR;
+
+            int args = 0;
             
-            int size = getStr(1, 39);
+            int size = getStr(1, 39, &args);
 
             char tempString[size];
 
             memcpy(tempString, stringData, size * sizeof(char));
 
             t->strPointer = tempString;
+            t->args = args;
             break;
         }
         case 34: { // ASCII for "
             t->tokenValue = STR_ARR;
+
+            int args = 0;
             
-            int size = getStr(STR_MAX_LEN, 34);
+            int size = getStr(STR_MAX_LEN, 34, &args);
 
             char tempString[size];
 
             memcpy(tempString, stringData, size * sizeof(char));
 
             t->strPointer = tempString;
+            t->args = args;
             break;
         }
         default:

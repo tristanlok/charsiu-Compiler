@@ -4,20 +4,24 @@
 #include "acg.h"
 
 // Basically identical to the basic interpreter code
-void generateExprCode(struct Node *n) {
+void generateCode(struct Node *n) {
     // Generate the code under the left most node first
     if (n->left){
-        generateExprCode(n->left);
+        generateCode(n->left);
     }
 
     // Generate the code under the right most node
     if (n->right){
-        generateExprCode(n->right);
+        generateCode(n->right);
     }
 
     switch (n->tokenValue) { 
         case PLUS:
-            acg_add();
+            if ((n->left)->tokenValue == INT_VALUE && (n->right)->tokenValue == INT_VALUE) {
+                acg_addInt();
+            } else {
+                acg_addStr();
+            }
             break;
 
         case MINUS:
@@ -33,8 +37,11 @@ void generateExprCode(struct Node *n) {
             break;
         
         case INT_VALUE:
-            acg_load(n->intValue);
+            acg_loadInt(n->intValue);
             break;
+
+        case STR_ARR:
+            acg_loadStr(n->strPointer);
 
         default:
             printf("Unknown token in on line %d. Token value: %d\n", Line, n->tokenValue);
@@ -53,3 +60,8 @@ void gen_postamble() {
 void gen_printint() {
     acg_printInt();
 }
+
+// Print requirements
+//
+// ability to print escape sequences (in assembly)
+//

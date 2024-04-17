@@ -1,11 +1,13 @@
 #ifndef ACG_H
 #define ACG_H
 
-void acg_add ();
+void acg_addInt ();
+void acg_addStr ();
 void acg_minus ();
 void acg_times ();
 void acg_div ();
-void acg_load (int intValue);
+void acg_loadInt (int intValue);
+void acg_loadStr (char *strValue);
 
 void acg_preamble ();
 

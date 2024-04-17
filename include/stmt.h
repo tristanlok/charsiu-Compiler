@@ -3,7 +3,7 @@
 
 static struct Node *getPrimaryNode();
 
-static struct Node *parsePrintExpr(int minPrec);
+static struct Node *parsePrintArgs(int minPrec, int *args);
 
 struct Node *print_stmt();
 

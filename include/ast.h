@@ -9,6 +9,8 @@ struct Node *createIntLeaf(int tokenValue, int intValue);
 
 struct Node *createStrLeaf(int tokenValue, char *str);
 
+struct Node *createStrNode(int tokenValue, char *str, struct Node *tail);
+
 struct Node *createStmtNode(int tokenValue, struct Node *tail);
 
 #endif

@@ -39,7 +39,7 @@ void acg_preamble () {
     Outfile);
 }
 
-void acg_load (int intValue) {
+void acg_loadInt (int intValue) {
     fprintf(Outfile, "\tpush %d\n", intValue);
 }
 
@@ -50,7 +50,7 @@ void acg_printInt (){
     Outfile);
 }
 
-void acg_add () {
+void acg_addInt () {
     fputs(
             "\tpop r8\n"
             "\tpop r9\n"
