@@ -6,21 +6,38 @@ static struct Node *createNode() {
 }
 
 struct Node *createOpNode(int tokenValue, struct Node *left, struct Node *right) {
-    struct Node *node = createNode();
+    struct Node *n = createNode();
 
-    node->tokenValue = tokenValue;
-    node->left = left;
-    node->right = right;
+    n->tokenValue = tokenValue;
+    n->left = left;
+    n->right = right;
 
-    return node;
+    return n;
 }
 
 struct Node *createIntLeaf(int tokenValue, int intValue) {
-    struct Node *node = createNode();
+    struct Node *n = createNode();
 
-    node->tokenValue = tokenValue;
-    node->tokenValue = intValue;
+    n->tokenValue = tokenValue;
+    n->tokenValue = intValue;
 
-    return node;
+    return n;
 }
 
+struct Node *createStrLeaf(int tokenValue, char *str) {
+    struct Node *n = createNode();
+
+    n->tokenValue = tokenValue;
+    n->strPointer = str;
+
+    return n;
+}
+
+struct Node *createStmtNode(int tokenValue, struct Node *tail) {
+    struct Node *n = createNode();
+
+    n->tokenValue = tokenValue;
+    n->tail = tail;
+
+    return n;
+}

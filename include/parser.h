@@ -26,7 +26,7 @@ static struct Node *getPrimaryNode();
 
 static struct Node *parseExpr(int minPrec);
 
-static struct Node *call_print();
+struct Node *stmt();
 
 void parseCode();
 

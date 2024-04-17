@@ -19,3 +19,13 @@ int is_token(int tokenValue) {
     }
     return 0;
 }
+
+void syntax_err() {
+    printf("Syntax error on line %d. Token value: %d\n", Line, Token.tokenValue);
+    exit(1);
+}
+
+void missing_err(char *str) {
+    printf("Syntax error on line %d. Expected [%s] missing\n", Line, str);
+    exit(1);
+}

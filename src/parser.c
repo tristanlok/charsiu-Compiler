@@ -18,8 +18,7 @@ static int detPrec(int tokenValue) {
         return prec;
     }
     
-    printf("Syntax error on line %d, token %d\n", Line, tokenValue);
-    exit(1);
+    syntax_err();
 }
 
 static int detAssoc(int tokenValue) {
@@ -29,11 +28,10 @@ static int detAssoc(int tokenValue) {
         return assoc;
     }
     
-    printf("Syntax error on line %d, token %d\n", Line, tokenValue);
-    exit(1);
+    syntax_err();
 }
 
-static struct Node *getPrimaryNode() {
+static struct Node *getExprNode() {
     struct Node *n;
 
     switch (Token.tokenValue) {
@@ -41,32 +39,30 @@ static struct Node *getPrimaryNode() {
         case L_PAREN:
             lexScan(&Token);
             n = parseExpr(0);
-            if (is_token(R_PAREN)) {
-                printf("Syntax error on line %d. Unmatched ( \n", Line);
-                exit(1);
+            if (!is_token(R_PAREN)) {
+                missing_err(")");
             }
             lexScan(&Token);
             return n;
-        // Creates the left node with the integer value
+        // Creates the left node with integer value
         case INT_VALUE:
             n = createIntLeaf(INT_VALUE, Token.intValue);
             lexScan(&Token); // Get next token
             return n;
 
         default:
-            printf("Syntax error on line %d\n", Line);
-            exit(1);
+            syntax_err();
     }
 }
 
 static struct Node *parseExpr(int minPrec) { // Utilizing Precedence Climbing Parsing with Expressions
     struct Node *leftn, *rightn;
 
-    leftn = getPrimaryNode(); // This will also deal with any parentheses creating a sub tree before returning into the left node
+    leftn = getExprNode(); // This will also deal with any parentheses creating a sub tree before returning into the left node
 
     int operatorTokenvalue = Token.tokenValue;
 
-    while (is_token(SEMI) && is_token(R_PAREN) && is_token(T_EOF) && detPrec(Token.tokenValue) > minPrec) {
+    while (!is_token(R_PAREN) && detPrec(Token.tokenValue) > minPrec) {
         // calculate precedence and associativity of current token
         lexScan(&Token);
 
@@ -78,34 +74,9 @@ static struct Node *parseExpr(int minPrec) { // Utilizing Precedence Climbing Pa
     }
 
     return leftn;
-
 }
 
 // Statement Parser
-
-struct Node *print_stmt() {
-    if (next_token(L_PAREN)) {
-        while (!next_token(R_PAREN)) {
-            // Not supposed to be here, leave for now
-            if (!is_token(PLUS)) {
-                break; // SYNTAX ERROR
-            }
-
-            switch (Token.tokenValue) {
-                case STR_ARR: // Terminal
-                    break;
-                case INT_VALUE: // Terminal
-                    break;
-                case L_PAREN: // Non Terminal
-                    lexScan(&Token);
-                    return stmt();
-                default:
-                    break; // Parsing Error
-            }
-        }
-    }
-}
-
 struct Node *stmt() {
     switch (Token.tokenValue) {
         case PRINT:
@@ -117,25 +88,11 @@ struct Node *stmt() {
 
 // Code Parser
 void parseCode() {
-    struct Node *ast;
+    struct Node *n;
 
     while (!is_token(T_EOF)) {
-        switch (Token.tokenValue) {
-            case PRINT:
-                //ast = call_print(ast);
+        n = stmt();
 
-                // determine if ast is empty or not - ie. print(); (Edge case)
-                if (!detNullTree(ast)) {
-                    generateExprCode(ast);
-                    gen_printint();
-                }
-
-                break;
-
-            default:
-                printf("Syntax error on line %d. Token value: %d\n", Line, Token.tokenValue);
-                exit(1);
-        }
     }
 }
 

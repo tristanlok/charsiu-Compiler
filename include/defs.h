@@ -51,6 +51,9 @@ struct Node{
 
         // String Lit
         char *strPointer;
+
+        // Statement tails
+        struct Node *tail;
     };
 };
 
