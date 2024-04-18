@@ -193,7 +193,7 @@ int lexScan(struct token *t) {
 
             memcpy(tempString, stringData, size * sizeof(char));
 
-            t->strPointer = tempString;
+            t->str = tempString;
             t->args = args;
             break;
         }
@@ -208,7 +208,7 @@ int lexScan(struct token *t) {
 
             memcpy(tempString, stringData, size * sizeof(char));
 
-            t->strPointer = tempString;
+            t->str = tempString;
             t->args = args;
             break;
         }

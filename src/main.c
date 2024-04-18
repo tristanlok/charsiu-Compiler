@@ -15,12 +15,12 @@ char identText[IDENT_MAX_LEN + 1];
 char stringData[STR_MAX_LEN + 1];
 
 // for asm
-int dataLen = 0;
-char *asmData = malloc(sizeof(char) * DATA_MAX_LEN);
-int bssLen = 0;
-char *asmBss = malloc(sizeof(char) * BSS_MAX_LEN);
-int textLen = 0;
-char *asmText = malloc(sizeof(char) * TEXT_MAX_LEN);
+int dataLen;
+char *asmData;
+int bssLen;
+char *asmBss;
+int textLen;
+char *asmText;
 
 // Initializing Functions
 static void init();
@@ -31,6 +31,12 @@ int main();
 static void init() {
     Line = 1;
     Putback = '\n';
+    
+    char *asmData = malloc(sizeof(char) * DATA_MAX_LEN);
+    int bssLen = 0;
+    char *asmBss = malloc(sizeof(char) * BSS_MAX_LEN);
+    int textLen = 0;
+    char *asmText = malloc(sizeof(char) * TEXT_MAX_LEN);
 }
 
 int main() {

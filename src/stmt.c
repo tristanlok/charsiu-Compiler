@@ -68,6 +68,11 @@ struct Node *print_stmt() {
                 printf("Too little or Too many arguments presented to print");
                 exit(1);
             }
+        
+        } else {
+            syntax_err();
+        }
+
         if (!is_token(R_PAREN)) {
             missing_err(")");
         }
