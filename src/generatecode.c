@@ -2,9 +2,12 @@
 #include "data.h"
 #include "generatecode.h"
 #include "acg.h"
+#include "helper.h"
+
+// REMEMBER TO FREE ALL MALLOC
 
 // Basically identical to the basic interpreter code
-void generateCode(struct Node *n) {
+void generateExprCode(struct Node *n) {
     // Generate the code under the left most node first
     if (n->left){
         generateCode(n->left);
@@ -17,11 +20,7 @@ void generateCode(struct Node *n) {
 
     switch (n->tokenValue) { 
         case PLUS:
-            if ((n->left)->tokenValue == INT_VALUE && (n->right)->tokenValue == INT_VALUE) {
-                acg_addInt();
-            } else {
-                acg_addStr();
-            }
+            acg_add();
             break;
 
         case MINUS:
@@ -37,15 +36,51 @@ void generateCode(struct Node *n) {
             break;
         
         case INT_VALUE:
-            acg_loadInt(n->intValue);
+            acg_loadInt(n->intLit);
+            break;
+
+        default:
+            syntax_err();
+    }
+}
+
+void *generateCode(struct Node *n) {
+    switch (n->nodeType) {
+        case OP:
+            if (n->left) {
+                generateCode(n->left);
+            }
+
+            if (n->right) {
+                generateCode(n->right);
+            }
+            break;
+        case STMT:
+            if (n->tokenValue == EXPR) {
+                generateExprCode(n->tail);
+            }
+            else if (n->tail) {
+                generateCode(n->tail);
+            }
+            break;
+    }
+
+    switch (n->tokenValue) {
+        case PRINT:
+            acg_loadData(n->str);
+            acg_print();
+            break;
+
+        case COMMA:
+            break;
+
+        case INT_VALUE:
+            acg_loadInt(n->intLit);
             break;
 
         case STR_ARR:
-            acg_loadStr(n->strPointer);
-
-        default:
-            printf("Unknown token in on line %d. Token value: %d\n", Line, n->tokenValue);
-            exit(1);
+            acg_loadStr(n->strLit);
+            break;
     }
 }
 
@@ -59,6 +94,12 @@ void gen_postamble() {
 
 void gen_printint() {
     acg_printInt();
+}
+
+void combineCode() {
+    fputs(asmData, Outfile);
+    fputs(asmBss, Outfile);
+    fputs(asmText, Outfile);
 }
 
 // Print requirements

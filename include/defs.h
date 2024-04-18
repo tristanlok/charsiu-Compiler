@@ -4,6 +4,10 @@
 #define IDENT_MAX_LEN 512 // defines the constant max length of an identifier
 #define STR_MAX_LEN 2048 // defines the max length of strings to be 512 characters
 
+#define DATA_MAX_LEN 1028
+#define BSS_MAX_LEN 1028
+#define TEXT_MAX_LEN 4096
+
 #include <stdio.h>
 #include <stdlib.h> 
 #include <string.h>
@@ -32,7 +36,7 @@ struct token{
         int intValue;
         
         struct {
-            char *strPointer;
+            char *str;
             int args;
         };
     };
@@ -40,8 +44,13 @@ struct token{
 
 //ABSTRACT SYNTAX TREE
 
+enum {
+    OP, LIT, STMT
+};
+
 struct Node{
     int tokenValue;
+    int nodeType;
 
     union {
         // Binary Operators
@@ -50,10 +59,10 @@ struct Node{
             struct Node *right;
         };
 
-        // Format Strings
+        // Statement
         struct {
-            char *strPointer;
-            struct Node *strTail;
+            char *str;
+            struct Node *tail;
         };
 
         // Integer Lit
@@ -61,9 +70,6 @@ struct Node{
 
         // String Lit
         char *strLit;
-
-        // Statement tails
-        struct Node *tail;
     };
 };
 

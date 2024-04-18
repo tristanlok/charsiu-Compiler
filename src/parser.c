@@ -46,7 +46,7 @@ static struct Node *getExprNode() {
             return n;
         // Creates the left node with integer value
         case INT_VALUE:
-            n = createIntLeaf(INT_VALUE, Token.intValue);
+            n = createIntLeaf(INT_VALUE, LIT, Token.intValue);
             lexScan(&Token); // Get next token
             return n;
 
@@ -68,7 +68,7 @@ static struct Node *parseExpr(int minPrec) { // Utilizing Precedence Climbing Pa
 
         rightn = parseExpr(detPrec(operatorTokenvalue) + detAssoc(operatorTokenvalue)); // If Associativity is LEFT, it will add one to the precedence
 
-        leftn = createOpNode(operatorTokenvalue, leftn, rightn);
+        leftn = createOpNode(operatorTokenvalue, OP, leftn, rightn);
 
         operatorTokenvalue = Token.tokenValue;
     }
@@ -82,7 +82,7 @@ struct Node *stmt() {
         case PRINT:
             return print_stmt();
         default:
-            return createStmtNode(EXPR, parseExpr(0));
+            return createStmtNode(EXPR, STMT, NULL, parseExpr(0));
     }
 }
 

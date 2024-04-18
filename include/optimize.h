@@ -1,6 +1,8 @@
 #ifndef OPTIMIZE_H
 #define OPTIMIZE_H
 
-struct Node *optimizeExpr(struct Node *n);
+static struct Node *optimizeExpr(struct Node *n);
+
+void *optimizeCode(struct Node *n);
 
 #endif

@@ -142,9 +142,11 @@ static int getStr(int max, int symbol, int *args) {
         }
     }
 
+    stringData[size] = '\0';
+
     c = getNext(); // Moves past the Quotation mark
 
-    return (size - escapeChr); // Escape Sequences count as 1 character
+    return (size + 1 - escapeChr); // Escape Sequences count as 1 character
 }
 
 int lexScan(struct token *t) {

@@ -12,7 +12,15 @@ FILE *Infile;
 FILE *Outfile;
 struct token Token;
 char identText[IDENT_MAX_LEN + 1];
-char stringData[STR_MAX_LEN];
+char stringData[STR_MAX_LEN + 1];
+
+// for asm
+int dataLen = 0;
+char *asmData = malloc(sizeof(char) * DATA_MAX_LEN);
+int bssLen = 0;
+char *asmBss = malloc(sizeof(char) * BSS_MAX_LEN);
+int textLen = 0;
+char *asmText = malloc(sizeof(char) * TEXT_MAX_LEN);
 
 // Initializing Functions
 static void init();

@@ -20,12 +20,12 @@ static struct Node *getPrimaryNode() {
             return n;
         // Creates the left node with integer value
         case INT_VALUE:
-            n = createIntLeaf(INT_VALUE, Token.intValue);
+            n = createIntLeaf(INT_VALUE, LIT, Token.intValue);
             lexScan(&Token); // Get next token
             return n;
         // Creates the left node with string value
         case STR_ARR:
-            n = createStrLeaf(STR_ARR, Token.strPointer);
+            n = createStrLeaf(STR_ARR, LIT, Token.str);
             lexScan(&Token);
             return n;
             
@@ -51,7 +51,7 @@ static struct Node *parsePrintArgs(int minPrec, int *args) {
 
         rightn = parsePrintArgs(2, args); // If Associativity is LEFT, it will add one to the precedence
 
-        leftn = createOpNode(COMMA, leftn, rightn);
+        leftn = createOpNode(COMMA, OP, leftn, rightn);
         
     }
 
@@ -59,9 +59,9 @@ static struct Node *parsePrintArgs(int minPrec, int *args) {
 }
 
 struct Node *print_stmt() {
+    struct Node *n = createStmtNode(PRINT, STMT, Token.str, NULL);
     if (next_token(L_PAREN)) {
         if (next_token(STR_ARR)) {
-            struct Node *n = createStrNode(STR_ARR, Token.strPointer, NULL);
             int args = Token.args;
             n->tail = parsePrintArgs(0, &args);
             if (args != 0) {
@@ -72,7 +72,7 @@ struct Node *print_stmt() {
             missing_err(")");
         }
         lexScan(&Token);
-        return createStmtNode(PRINT, n);
+        return n;
 
     } else {
         missing_err("(");

@@ -1,8 +1,7 @@
 #ifndef ACG_H
 #define ACG_H
 
-void acg_addInt ();
-void acg_addStr ();
+void acg_add ();
 void acg_minus ();
 void acg_times ();
 void acg_div ();
