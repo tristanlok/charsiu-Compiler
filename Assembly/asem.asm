@@ -50,34 +50,34 @@ _start:
 
     ; Stack pointers can Increment/Decrement + Pre-/Post-
     ; x86-64 decrements when we call push
+    push rbp
     mov rbp, rsp ; Change the base pointer (keeps track of the base of the current stack frame) to the top of the stack pointer
 
-    push 5
+    ; equivalent to push 5
+    sub rsp, 4 ; each int is 4 bytes
+    mov dword [rbp - 4], 5 ; moves 5 into the stack
 
-    push 0xa ; ascii for newline
+    sub rsp, 4
+    mov dword [rbp - 8], 0xa
+    
+    ;sub rsp, 7
+    ;lea [rbp - 12], ["tristan"]
 
-    mov rax, "tristan"
-    push rax
+    sub rsp, 4
+    mov dword [rbp - 12], 9
 
-    push 1
+    mov eax, dword [rbp - 12]
+    call _printDigit ; 9
 
-    pop rax
-    call _printDigit ; 1
+    ;mov rsi, [rbp - 12]
+    ;mov rdx, 7
+    ;call _printText ; tristan
 
-    mov rsi, rsp ; same as lea rsi, [rsp]
-    mov rdx, 7
-    call _printText ; tristan
-
-    add rsp, 8
-
-    mov rsi, rsp
+    mov esi, dword [rbp - 8]
     mov rdx, 1
-
     call _printText ; newline
 
-    add rsp, 8 ; Always increment by 8 as push function always pushes 64 bit
-
-    pop rax
+    mov eax, dword [rbp - 4]
     call _printDigit ; 5
 
     ; Ends the program
