@@ -2,6 +2,8 @@ section .data
     text1 db "What is your name? "
     text2 db "Hello, "
     digit db 0, 10
+    newline db 0xA
+    text db "tristan1234567890"
 
 section .bss
     name resb 16
@@ -57,23 +59,23 @@ _start:
     sub rsp, 4 ; each int is 4 bytes
     mov dword [rbp - 4], 5 ; moves 5 into the stack
 
-    sub rsp, 4
-    mov dword [rbp - 8], 0xa
+    sub rsp, 8
+    mov qword [rbp - 12], newline
     
-    ;sub rsp, 7
-    ;lea [rbp - 12], ["tristan"]
+    sub rsp, 8
+    mov qword [rbp - 20], text
 
     sub rsp, 4
-    mov dword [rbp - 12], 9
+    mov dword [rbp - 24], 9
 
-    mov eax, dword [rbp - 12]
+    mov eax, dword [rbp - 24]
     call _printDigit ; 9
 
-    ;mov rsi, [rbp - 12]
-    ;mov rdx, 7
-    ;call _printText ; tristan
+    mov rsi, qword [rbp - 20]
+    mov rdx, 17
+    call _printText ; tristan
 
-    mov esi, dword [rbp - 8]
+    mov rsi, qword [rbp - 12]
     mov rdx, 1
     call _printText ; newline
 
