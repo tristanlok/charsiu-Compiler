@@ -60,10 +60,12 @@ _start:
     mov dword [rbp - 4], 5 ; moves 5 into the stack
 
     sub rsp, 8
-    mov qword [rbp - 12], newline
+    lea rax, [rel newline]
+    mov qword [rbp - 12], rax
     
     sub rsp, 8
-    mov qword [rbp - 20], text
+    lea rax, [rel text]
+    mov qword [rbp - 20], rax
 
     sub rsp, 4
     mov dword [rbp - 24], 9
