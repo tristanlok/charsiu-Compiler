@@ -17,3 +17,5 @@ extern int bssLen;
 extern char *asmBss;
 extern int textLen;
 extern char *asmText;
+
+extern int stackPointer;

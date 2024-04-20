@@ -113,7 +113,7 @@ static int getStr(int max, int symbol, int *args) {
             c = getNext();
             
             // case for supported escape sequences
-            if (c == 'n' || c == 't' || c == 92 || c == 34 || c == 39 || c == '?') {
+            if (c == 'n' || c == 't' || c == 92 || c == 34 || c == 39) {
                 stringData[size++] = 92; // add \ into string
                 escapeChr += 1;
 
@@ -125,10 +125,17 @@ static int getStr(int max, int symbol, int *args) {
         } else if (c == '%') {
             c = getNext();
             
-            stringData[size++] = '%';
+            // case for supported format specifier
+            if (c == 'i' || c == 's' || c == '%') {
+                stringData[size++] = '%';
+                
+                if (c == 'i' || c == 's') {
+                    args += 1;
+                }
 
-            if (c == 'i' || c == 's') {
-                args += 1;
+            } else {
+                printf("Unsupported Escape Sequence on line %d\n", Line);
+                exit(1);
             }
         }
 

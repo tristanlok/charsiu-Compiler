@@ -22,6 +22,8 @@ char *asmBss;
 int textLen;
 char *asmText;
 
+int stackPointer;
+
 // Initializing Functions
 static void init();
 int main();
@@ -37,6 +39,8 @@ static void init() {
     char *asmBss = malloc(sizeof(char) * BSS_MAX_LEN);
     int textLen = 0;
     char *asmText = malloc(sizeof(char) * TEXT_MAX_LEN);
+
+    int stackPointer = 0;
 }
 
 int main() {
