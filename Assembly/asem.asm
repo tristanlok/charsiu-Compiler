@@ -64,18 +64,26 @@ _start:
     mov qword [rbp - 12], rax
     
     sub rsp, 8
-    lea rax, [rel text]
+    lea rax, [rel newline]
     mov qword [rbp - 20], rax
 
-    sub rsp, 4
-    mov dword [rbp - 24], 9
+    sub rsp, 8
+    lea rax, [rel text]
+    mov qword [rbp - 28], rax
 
-    mov eax, dword [rbp - 24]
+    sub rsp, 4
+    mov dword [rbp - 32], 9
+
+    mov eax, dword [rbp - 32]
     call _printDigit ; 9
 
-    mov rsi, qword [rbp - 20]
+    mov rsi, qword [rbp - 28]
     mov rdx, 17
     call _printText ; tristan
+
+    mov rsi, qword [rbp - 20]
+    mov rdx, 1
+    call _printText ; newline
 
     mov rsi, qword [rbp - 12]
     mov rdx, 1
