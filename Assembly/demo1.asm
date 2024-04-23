@@ -10,107 +10,54 @@
 
 section .data
     newline db 0xA
-    tab db "        "
-    whack db 92
-    tick db 39
-    quote db 34
     percentage db 37
 
     ; User strings goes here
-    str_1 .asciz "te\tst"
-    str_2 .asciz "test 1\t%i \n%s"
+    str_1 db `te\tst`, 0
+    str_2 db `test 1\t%i \n%s`, 0
 
 section .bss
 
 section .text
     global _start
 
-; Deals with escape sequences
-
-_escapeSeq:
-    add rbx, 1 ; increments to the next character
-
-    cmp [r8 + rbx], 110 ; \n
-    je _newline
-
-    cmp [r8 + rbx], 116 ; \t
-    je _tab
-
-    cmp [r8 + rbx], 92 ; \\
-    je _whack
-
-    cmp [r8 + rbx], 39 ; \'
-    je _tick
-
-    cmp [r8 + rbx], 34 ; \"
-    je _quote
-
-    ret
-
-; Prints the specified escape sequence
-
-_newline:
-    mov rax, 1
-    mov rdi, 1
-    lea rsi, [rel newline]
-    mov rdx, 1
-    syscall
-    ret
-
-_tab:
-    mov rax, 1
-    mov rdi, 1
-    lea rsi, [rel tab]
-    mov rdx, 8
-    syscall
-    ret
-
-_whack:
-    mov rax, 1
-    mov rdi, 1
-    lea rsi, [rel whack]
-    mov rdx, 1
-    syscall
-    ret
-
-_tick:
-    mov rax, 1
-    mov rdi, 1
-    lea rsi, [rel tick]
-    mov rdx, 1
-    syscall
-    ret
-
-_quote:
-    mov rax, 1
-    mov rdi, 1
-    lea rsi, [rel quote]
-    mov rdx, 1
-    syscall
-    ret
-
 ; Deals with Format Specifier
 
 _formatSpec:
     add rbx, 1 ; increment to the next character
 
-    cmp [r8 + rbx], 105 ; %i
+    cmp byte [r8 + rbx], 105 ; %i
     je _intArg
 
-    cmp [r8 + rbx], 115 ; %s
+    cmp byte [r8 + rbx], 115 ; %s
     je _stringArg
 
-    cmp [r8 + rbx], 37 ; %%
+    cmp byte [r8 + rbx], 37 ; %%
     je _percentageArg
 
     ret
 
 ; Prints the specific value
 
-_stringArg:
-    add r9, 8 ; Increment r9 by as the size of string pointer is 8 bytes, (to be decremented as we are looking down)
+_intArg:
+    add rcx, 4 ;Increment r9 by the size of an integer which is 4 bytes (decremented)
 
-    lea rsi, [rbp - r9] ; Gets the current argument
+    mov rax, rbp ; we perform this as we cannot perform address - address
+    sub rax, rcx
+
+    lea eax, [rax] ; we only want 4 bytes therefore it is eax
+
+    call _printInt
+
+    ret
+
+_stringArg:
+    add rcx, 8 ; Increment r9 by the size of string pointer is 8 bytes, (to be decremented as we are looking down)
+
+    mov rax, rbp
+    sub rax, rcx
+
+    lea rsi, [rax] ; Gets the current argument
 
     call _printStr
 
@@ -138,20 +85,16 @@ _printStr:
     ; Given that the string pointer is in rsi
     xor r10, r10 ; clears a temp reg for counting
 
-_printStrloop:
-    ; ESCAPE SEQ SUBROUTINE NEEDS TO BE UPDATED TO SUPPORT VARIOUS CALLS
-    cmp [r8 + r10], 92 ; check if character is whack (escape sequence)
-    je _escapeSeq
-
+_printStrLoop:
     ; Prints current character if != escape sequence
     lea rsi, [r8 + r10]
     mov rdi, 1
-    jne _printChar
+    call _printChar
 
     ; Increments to the next character
     add r10, 1
 
-    cmp [rax + r10], 0 ; Check if the next character is a null terminator
+    cmp byte [rax + r10], 0 ; Check if the next character is a null terminator
     jne _printStrLoop ; if does not equal null terminator, loop back
 
     ret
@@ -160,26 +103,26 @@ _printStrloop:
 ; Prints Int Arguments
 
 _printInt:
-    ; Creating a new Function Frame
+    ; Given that the integer is in eax
     push rbp
     mov rbp, rsp
 
-    mov rcx, 10
+    mov ecx, 10
 
 _convertInt:
     xor rdx, rdx ; clear rdx
 
     ; divide number by 10, rax <- resultant, rdx <- remainder
-    div rcx
+    div ecx
 
-    add rdx, 48 ; Convert Int to Ascii
+    add edx, 48 ; Convert Int to Ascii
 
     mov [rsp], dl ; Moving Byte 0 of rdx into the stack
     sub rsp, 1
 
-    test rax, rax ; checks to see if rax is empty, will affect the z flag
+    test eax, eax ; checks to see if rax is empty, will affect the z flag
 
-    jnz _convertInteger ; jumps back to the top if z flag doesn't show 1
+    jnz _convertInt ; jumps back to the top if z flag doesn't show 1
 
     
     mov rbx, rbp ; this will be the register holding the size of the integer
@@ -196,10 +139,18 @@ _convertInt:
     mov rdx, rbx
     Syscall
 
+    ret
+
 ; Print formatted String
 
-_checkFormat:
-    cmp [r8 + rbx], 37 ; check if character is percentage (format specifier) 
+_printf:
+    mov r8, rax ; moves the pointer from rax to rdx
+    xor rcx, rcx ; clearing r9 to use to determine location of format specifier % value
+    xor rbx, rbx ; clearing rbx to be used as counter/index
+
+_printfloop:
+    ; Checks for special cases
+    cmp byte [r8 + rbx], 37 ; check if character is percentage (format specifier)
     je _formatSpec
 
     ; Prints current character if != formatted string
@@ -207,25 +158,9 @@ _checkFormat:
     mov rdi, 1
     jne _printChar
 
-
-    ret
-
-_printf:
-    mov r8, rax ; moves the pointer from rax to rdx
-    xor r9, r9 ; clearing r9 to use to determine location of format specifier % value
-    xor rbx, rbx ; clearing rbx to be used as counter/index
-
-_printfloop:
-    ; Checks for special cases
-    cmp [r8 + rbx], 92 ; check if character is whack (escape sequence)
-    je _escapeSeq
-
-    ; (else if statement) prints character if not format string
-    jne _checkFormat
-
     add rbx, 1    
 
-    cmp [r8 + rbx], 0 ; check if next character is a null terminator
+    cmp byte [r8 + rbx], 0 ; check if next character is a null terminator
     jne _printfloop
 
     ret
@@ -245,3 +180,7 @@ _start:
     lea rax, [rel str_2]
 
     call _printf
+
+    mov rax, 60
+    mov rdi, 0
+    syscall

@@ -3,7 +3,7 @@ section .data
     text2 db "Hello, "
     digit db 0, 10
     newline db 0xA
-    text db "tristan1234567890"
+    text db `tristan\n12\\345\t6 \\ 78 \ 90`, 10
 
 section .bss
     name resb 16
@@ -78,7 +78,7 @@ _start:
     call _printDigit ; 9
 
     mov rsi, qword [rbp - 28]
-    mov rdx, 17
+    mov rdx, 40
     call _printText ; tristan
 
     mov rsi, qword [rbp - 20]
