@@ -24,42 +24,43 @@ section .text
 ; Deals with Format Specifier
 
 _formatSpec:
+    ; Assumes string is stored in rax
     add rbx, 1 ; increment to the next character
 
-    cmp byte [r8 + rbx], 105 ; %i
-    je _intArg
-
-    cmp byte [r8 + rbx], 115 ; %s
+    cmp byte [rax + rbx], 115 ; %s
     je _stringArg
 
-    cmp byte [r8 + rbx], 37 ; %%
+    cmp byte [rax + rbx], 105 ; %i
+    je _intArg
+
+    cmp byte [rax + rbx], 37 ; %%
     je _percentageArg
 
-    ret
+    ; ret - no need for return as the above jumps should return back to printfloop
 
 ; Prints the specific value
 
-_intArg:
-    add rcx, 4 ;Increment r9 by the size of an integer which is 4 bytes (decremented)
+_stringArg:
+    add r13, 8 ; Increment r9 by the size of string pointer is 8 bytes, (to be decremented as we are looking down)
 
-    mov rax, rbp ; we perform this as we cannot perform address - address
-    sub rax, rcx
+    mov rax, rbp
+    sub rax, r13
 
-    lea eax, [rax] ; we only want 4 bytes therefore it is eax
+    mov rax, [rax]
 
-    call _printInt
+    call _printStr
 
     ret
 
-_stringArg:
-    add rcx, 8 ; Increment r9 by the size of string pointer is 8 bytes, (to be decremented as we are looking down)
+_intArg:
+    add r13, 4 ;Increment r9 by the size of an integer which is 4 bytes (decremented)
 
-    mov rax, rbp
-    sub rax, rcx
+    mov rax, rbp ; we perform this as we cannot perform address - address
+    sub rax, r13
 
-    lea rsi, [rax] ; Gets the current argument
+    mov eax, [rax] ; we only want 4 bytes therefore it is eax (mov since we want the value)
 
-    call _printStr
+    call _printInt
 
     ret
 
@@ -82,19 +83,22 @@ _printChar:     ; Requires RSI and RDX to be set before hand
 ; Prints String Arguments
 
 _printStr:
-    ; Given that the string pointer is in rsi
-    xor r10, r10 ; clears a temp reg for counting
+    ; Given that the string pointer is in rax
+    xor r12, r12 ; clears the rcx reg for counting
 
 _printStrLoop:
+    push rax ; saves rax
     ; Prints current character if != escape sequence
-    lea rsi, [r8 + r10]
-    mov rdi, 1
+    lea rsi, [rax + r12]
+    mov rdx, 1
     call _printChar
 
-    ; Increments to the next character
-    add r10, 1
+    pop rax
 
-    cmp byte [rax + r10], 0 ; Check if the next character is a null terminator
+    ; Increments to the next character
+    add r12, 1
+
+    cmp byte [rax + r12], 0 ; Check if the next character is a null terminator
     jne _printStrLoop ; if does not equal null terminator, loop back
 
     ret
@@ -117,50 +121,62 @@ _convertInt:
 
     add edx, 48 ; Convert Int to Ascii
 
-    mov [rsp], dl ; Moving Byte 0 of rdx into the stack
     sub rsp, 1
+    mov [rsp], dl ; Moving Byte 0 of rdx into the stack
 
     test eax, eax ; checks to see if rax is empty, will affect the z flag
 
     jnz _convertInt ; jumps back to the top if z flag doesn't show 1
 
     
-    mov rbx, rbp ; this will be the register holding the size of the integer
-    sub rbx, rsp ; rbp - rsp
+    mov r8, rbp ; this will be the register holding the size of the integer
+    sub r8, rsp ; rbp - rsp
 
     ; Account for the extra decrease in rsp
-    add rsp, 1
+    ; add rsp, 1
 
     ; Prints the result
 
     mov rax, 1
     mov rdi, 1
     mov rsi, rsp
-    mov rdx, rbx
+    mov rdx, r8
     Syscall
+
+    add rsp, r8 ; move back to rbp
+
+    pop rbp ; fix rbp
 
     ret
 
 ; Print formatted String
 
 _printf:
-    mov r8, rax ; moves the pointer from rax to rdx
-    xor rcx, rcx ; clearing r9 to use to determine location of format specifier % value
+    xor r13, r13 ; determine location of format specifier % value
     xor rbx, rbx ; clearing rbx to be used as counter/index
 
 _printfloop:
+    push rax ; saves the pointer at rax
+
+    push _printfloopEnd ; pushes address of end for jump to return back to
+
     ; Checks for special cases
-    cmp byte [r8 + rbx], 37 ; check if character is percentage (format specifier)
+    cmp byte [rax + rbx], 37 ; check if character is percentage (format specifier)
     je _formatSpec
 
     ; Prints current character if != formatted string
-    lea rsi, [r8 + rbx]
-    mov rdi, 1
+    lea rsi, [rax + rbx]
+    mov rdx, 1
+    
     jne _printChar
 
-    add rbx, 1    
+_printfloopEnd:
 
-    cmp byte [r8 + rbx], 0 ; check if next character is a null terminator
+    pop rax ; fixes the pointer in rax
+
+    add rbx, 1
+
+    cmp byte [rax + rbx], 0 ; check if next character is a null terminator
     jne _printfloop
 
     ret
@@ -175,7 +191,7 @@ _start:
     ; Pointers are 8 bytes
     sub rsp, 8
     lea rax, [rel str_1]
-    mov qword [rbp - 8], rax
+    mov qword [rbp - 12], rax
 
     lea rax, [rel str_2]
 
