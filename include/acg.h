@@ -1,12 +1,16 @@
 #ifndef ACG_H
 #define ACG_H
 
-void acg_add ();
-void acg_minus ();
-void acg_times ();
-void acg_div ();
-void acg_loadInt (int intValue);
-void acg_loadStr (char *strValue);
+static void verifyCharAlloc (int currLen, int maxLen, char *src, char *dest);
+
+int acg_add (int left, int right);
+int acg_minus (int left, int right);
+int acg_times (int left, int right);
+int acg_div (int left, int right);
+int acg_loadInt (int intValue);
+int acg_loadStr (char *strValue);
+
+void acg_print(int mainStack, int argIdx, int *argList);
 
 void acg_preamble ();
 

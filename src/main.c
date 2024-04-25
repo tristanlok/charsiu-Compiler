@@ -24,6 +24,11 @@ char *asmText;
 
 int stackPointer;
 
+int *argList;
+int argIdx;
+
+int strIdx;
+
 // Initializing Functions
 static void init();
 int main();
@@ -34,13 +39,18 @@ static void init() {
     Line = 1;
     Putback = '\n';
     
+    int dataLen = DATA_MAX_LEN;
     char *asmData = malloc(sizeof(char) * DATA_MAX_LEN);
-    int bssLen = 0;
+    int bssLen = BSS_MAX_LEN;
     char *asmBss = malloc(sizeof(char) * BSS_MAX_LEN);
-    int textLen = 0;
+    int textLen = TEXT_MAX_LEN;
     char *asmText = malloc(sizeof(char) * TEXT_MAX_LEN);
 
     int stackPointer = 0;
+    int *argList = malloc(sizeof(int) * MAX_ARG);
+    int argIdx = 0;
+
+    int strIdx = 0;
 }
 
 int main() {

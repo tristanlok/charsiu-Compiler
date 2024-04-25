@@ -6,45 +6,56 @@
 
 // REMEMBER TO FREE ALL MALLOC
 
+static void verifyAlloc (int currLen, int maxLen, int *src) {
+    if (currLen + 1 > maxLen) {
+        src = realloc(src, sizeof(int) * (currLen + 1 + maxLen));
+    }
+}
+
 // Basically identical to the basic interpreter code
-void generateExprCode(struct Node *n) {
+int generateExprCode(struct Node *n) {
+    int stack, lStack, rStack;
     // Generate the code under the left most node first
     if (n->left){
-        generateCode(n->left);
+        lStack = generateExprCode(n->left);
     }
 
     // Generate the code under the right most node
     if (n->right){
-        generateCode(n->right);
+        lStack = generateExprCode(n->right);
     }
 
     switch (n->tokenValue) { 
         case PLUS:
-            acg_add();
+            stack = acg_add(lStack, rStack);
             break;
 
         case MINUS:
-            acg_minus();
+            stack = acg_minus(lStack, rStack);
             break;
 
         case TIMES:
-            acg_times();
+            stack = acg_times(lStack, rStack);
             break;
 
         case DIV:
-            acg_div();
+            stack = acg_div(lStack, rStack);
             break;
         
         case INT_VALUE:
-            acg_loadInt(n->intLit);
+            stack = acg_loadInt(n->intLit);
             break;
 
         default:
             syntax_err();
     }
+
+    return stack;
 }
 
 void *generateCode(struct Node *n) {
+    int stack;
+    // If it is a Node, so it goes to the bottom and works up
     switch (n->nodeType) {
         case OP:
             if (n->left) {
@@ -57,7 +68,7 @@ void *generateCode(struct Node *n) {
             break;
         case STMT:
             if (n->tokenValue == EXPR) {
-                generateExprCode(n->tail);
+                stack = generateExprCode(n->tail);
             }
             else if (n->tail) {
                 generateCode(n->tail);
@@ -65,23 +76,26 @@ void *generateCode(struct Node *n) {
             break;
     }
 
+    // If it is a leaf or statement
     switch (n->tokenValue) {
         case PRINT:
-            acg_loadData(n->str);
-            acg_print();
-            break;
-
-        case COMMA:
+            stack = acg_loadStr(n->str);
+            acg_print(stack, argIdx, argList); // requires main string + arg num + arg list
             break;
 
         case INT_VALUE:
-            acg_loadInt(n->intLit);
+            stack = acg_loadInt(n->intLit);
             break;
 
         case STR_ARR:
-            acg_loadStr(n->strLit);
+            stack = acg_loadStr(n->strLit);
             break;
     }
+
+    // verify and add args
+    verifyAlloc(argIdx, MAX_ARG, argList);
+    argList[argIdx] = stack;
+    argIdx += 1;
 }
 
 void gen_preamble() {

@@ -19,3 +19,8 @@ extern int textLen;
 extern char *asmText;
 
 extern int stackPointer;
+
+extern int *argList;
+extern int argIdx;
+
+extern int strIdx;

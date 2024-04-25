@@ -7,6 +7,7 @@
 #define DATA_MAX_LEN 1028
 #define BSS_MAX_LEN 1028
 #define TEXT_MAX_LEN 4096
+#define MAX_ARG 10
 
 #include <stdio.h>
 #include <stdlib.h> 
