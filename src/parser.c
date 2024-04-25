@@ -92,7 +92,7 @@ void parseCode() {
 
     while (!is_token(T_EOF)) {
         n = stmt();
-
+        generateCode(n);
     }
 }
 

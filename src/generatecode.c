@@ -92,7 +92,6 @@ void *generateCode(struct Node *n) {
             break;
     }
 
-    // verify and add args
     verifyAlloc(argIdx, MAX_ARG, argList);
     argList[argIdx] = stack;
     argIdx += 1;
@@ -106,17 +105,9 @@ void gen_postamble() {
     acg_postamble();
 }
 
-void gen_printint() {
-    acg_printInt();
-}
-
 void combineCode() {
     fputs(asmData, Outfile);
     fputs(asmBss, Outfile);
     fputs(asmText, Outfile);
 }
 
-// Print requirements
-//
-// ability to print escape sequences (in assembly)
-//

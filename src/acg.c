@@ -105,14 +105,21 @@ void acg_preamble () {
             "\tjne _printfloop\n"
             "\tret\n");
 
+    printf("1\n");
     verifyCharAlloc(dataLen, DATA_MAX_LEN, dataSec, asmData);
     verifyCharAlloc(textLen, TEXT_MAX_LEN, textSec, asmText);
 
-    strcat(asmData, dataSec);
-    strcat(asmText, textSec);
-
+    printf("%i\n", stackPointer);
+    printf("%s\n", asmData);
+    //strcat(asmData, dataSec);
+    //snprintf(asmData, DATA_MAX_LEN, dataSec);
+    printf("3\n");
+    //strcat(asmText, textSec);
+    memcpy(asmText, textSec, strlen(textSec));
+    
     dataLen += strlen(dataSec);
     textLen += strlen(textSec);
+    printf("4\n");
 }
 
 int acg_loadInt (int intValue) {

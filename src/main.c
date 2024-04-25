@@ -39,13 +39,13 @@ static void init() {
     Line = 1;
     Putback = '\n';
     
-    int dataLen = DATA_MAX_LEN;
+    int dataLen = 0;
     char *asmData = malloc(sizeof(char) * DATA_MAX_LEN);
-    int bssLen = BSS_MAX_LEN;
+    int bssLen = 0;
     char *asmBss = malloc(sizeof(char) * BSS_MAX_LEN);
-    int textLen = TEXT_MAX_LEN;
+    int textLen = 0;
     char *asmText = malloc(sizeof(char) * TEXT_MAX_LEN);
-
+    
     int stackPointer = 0;
     int *argList = malloc(sizeof(int) * MAX_ARG);
     int argIdx = 0;
@@ -71,8 +71,11 @@ int main() {
 
     lexScan(&Token);
     gen_preamble();
+    printf("in\n");
     parseCode();
     gen_postamble();
+
+    combineCode();
 
     fclose(Outfile);
 
@@ -81,7 +84,7 @@ int main() {
     
     // Remove the extra files
     system("rm out.o");
-    system("rm out.asm");
+    //system("rm out.asm");
 
     return 0;
 }
