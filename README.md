@@ -3,4 +3,6 @@
 
 This is my journey towards writing a Compiler for my programming language charsiu!
 
+Machine Code is written in Assembly x86-64 in Intel Syntax Compiled with NASM
+
 Deeper explanation in the wiki -> journey
